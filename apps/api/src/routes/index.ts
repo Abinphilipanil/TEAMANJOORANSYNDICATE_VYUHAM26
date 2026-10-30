@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { ENV } from '../config/env';
 import careersRoutes from './careers.routes';
 import agentRoutes from './agent.routes';
 import roadmapRoutes from './roadmap.routes';
@@ -36,6 +37,15 @@ router.get('/health', (req, res) => {
     agent: 'AF-03 Career Intelligence Agent',
     timestamp: new Date().toISOString(),
     version: '1.0.0',
+    ai: {
+      provider: ENV.AI_PROVIDER,
+      model: ENV.GROQ_MODEL,
+      apiKeyConfigured: Boolean(
+        ENV.GROQ_API_KEY &&
+        ENV.GROQ_API_KEY.trim().length > 0 &&
+        ENV.GROQ_API_KEY !== 'gsk_your_groq_api_key_here'
+      ),
+    },
   });
 });
 

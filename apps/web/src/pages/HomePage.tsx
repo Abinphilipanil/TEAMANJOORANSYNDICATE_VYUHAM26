@@ -8,7 +8,7 @@ export const HomePage: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="ca-page-container ca-home-page max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="ca-page-container ca-home-page">
       {/* 1. Hero Section with Dominant "Analyse My Resume" CTA */}
       <HeroSection onStartAnalysis={() => navigate('/resume-analysis')} />
 
@@ -22,4 +22,3 @@ export const HomePage: React.FC = () => {
 };
 
 export default HomePage;
-

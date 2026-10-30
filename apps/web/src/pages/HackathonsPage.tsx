@@ -384,3 +384,4 @@ export const HackathonsPage: React.FC = () => {
 };
 
 export default HackathonsPage;
+

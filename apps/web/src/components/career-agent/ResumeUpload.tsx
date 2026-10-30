@@ -20,11 +20,11 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return '0 KB';
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    if (bytes < k) return `${bytes} B`;
+    if (bytes < k * 1024) return `${Math.round(bytes / k)} KB`;
+    return `${(bytes / (k * 1024)).toFixed(1)} MB`;
   };
 
   const validateAndSetFile = (selectedFile: File) => {
@@ -42,7 +42,7 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({
       return;
     }
 
-    // Check file size (e.g., max 10MB)
+    // Check file size (max 10MB)
     const maxSizeBytes = 10 * 1024 * 1024;
     if (selectedFile.size > maxSizeBytes) {
       if (setError) {
@@ -81,8 +81,18 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({
 
   const handleTriggerClick = () => {
     if (inputRef.current) {
+      inputRef.current.value = '';
       inputRef.current.click();
     }
+  };
+
+  const handleRemove = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+    onFileRemove();
+    if (setError) setError('');
   };
 
   const handleSampleFill = () => {
@@ -125,14 +135,15 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({
         ref={inputRef}
         type="file"
         accept="application/pdf,.pdf"
-        className="cm-file-input-hidden"
+        className="cm-hidden-file-input"
+        style={{ display: 'none' }}
         onChange={handleChange}
         aria-label="Upload resume in PDF format"
       />
 
       {!file ? (
         <div
-          className={`cm-dropzone ${isDragOver ? 'cm-dropzone-active' : ''} ${error ? 'cm-dropzone-error' : ''}`}
+          className={`cm-dropzone ${isDragOver ? 'cm-dropzone-dragover' : ''} ${error ? 'cm-dropzone-error' : ''}`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
@@ -145,61 +156,57 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({
               handleTriggerClick();
             }
           }}
-          aria-label="Dropzone for PDF resume file"
+          aria-label="Drag and drop your resume here or click to browse"
         >
-          <div className="cm-dropzone-icon-wrap">
-            <IconUploadCloud className="w-8 h-8 text-primary" />
+          <div className="cm-dropzone-icon-box">
+            <IconUploadCloud className="w-6 h-6" />
           </div>
 
-          <div className="cm-dropzone-text-group">
-            <span className="cm-dropzone-prompt">
-              <strong>Click to upload</strong> or drag and drop your PDF here
-            </span>
-            <span className="cm-dropzone-constraints">
-              PDF documents only &bull; Up to 10 MB maximum
-            </span>
+          <div className="cm-dropzone-main-text">
+            Drag and drop your resume here
           </div>
 
-          <button
-            type="button"
-            className="cm-btn-browse"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleTriggerClick();
-            }}
-          >
-            Select PDF File
-          </button>
+          <div className="cm-dropzone-sub-action">
+            <span className="cm-click-cta">or click to browse</span>
+          </div>
+
+          <div className="cm-dropzone-sub-text">
+            PDF only &middot; Maximum size 10 MB
+          </div>
         </div>
       ) : (
-        <div className="cm-file-selected-card">
+        <div className="cm-selected-file-card">
           <div className="cm-file-card-left">
-            <div className="cm-pdf-icon-badge">
-              <IconFilePdf className="w-6 h-6 text-primary" />
+            <div className="cm-pdf-icon-wrapper" aria-hidden="true">
+              <IconFilePdf className="w-6 h-6" />
             </div>
-            <div className="cm-file-info">
-              <div className="cm-file-name-row">
-                <span className="cm-file-name" title={file.name}>
-                  {file.name}
-                </span>
-                <span className="cm-file-status-tag">
-                  <IconCheckCircle className="w-3.5 h-3.5 text-success inline-icon" /> Ready for Analysis
-                </span>
-              </div>
-              <span className="cm-file-size">{formatFileSize(file.size)}</span>
+            <div className="cm-file-meta">
+              <span className="cm-file-name" title={file.name}>
+                {file.name}
+              </span>
+              <span className="cm-file-size">
+                PDF document &middot; {formatFileSize(file.size)}
+              </span>
             </div>
           </div>
 
-          <button
-            type="button"
-            className="cm-btn-remove-file"
-            onClick={onFileRemove}
-            title="Remove selected file"
-            aria-label="Remove selected resume"
-          >
-            <IconTrash className="w-4 h-4" />
-            <span>Remove</span>
-          </button>
+          <div className="cm-file-card-right">
+            <span className="cm-status-ready">
+              <IconCheckCircle className="w-4 h-4" />
+              <span>Ready for Analysis</span>
+            </span>
+
+            <button
+              type="button"
+              className="cm-btn-remove"
+              onClick={handleRemove}
+              title="Remove resume"
+              aria-label="Remove selected resume"
+            >
+              <IconTrash className="w-4 h-4" />
+              <span>Remove</span>
+            </button>
+          </div>
         </div>
       )}
 
@@ -214,4 +221,3 @@ export const ResumeUpload: React.FC<ResumeUploadProps> = ({
 };
 
 export default ResumeUpload;
-

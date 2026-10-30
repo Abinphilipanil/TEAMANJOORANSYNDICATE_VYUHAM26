@@ -16,6 +16,10 @@ export const ResumeAnalysisPage: React.FC = () => {
     setAnalysisJobDescription,
     resumeAnalysisResult,
     setResumeAnalysisResult,
+    setRoadmap,
+    setSkillGaps,
+    setSelectedRole,
+    setRoleReadiness,
   } = useApp();
 
   const [analysisStep, setAnalysisStep] = useState<1 | 2>(1);
@@ -88,6 +92,18 @@ export const ResumeAnalysisPage: React.FC = () => {
         jobDescription: analysisJobDescription.trim(),
       });
       setResumeAnalysisResult(data);
+      if (data.roadmap) {
+        setRoadmap(data.roadmap);
+      }
+      if (data.skillGaps && data.skillGaps.length > 0) {
+        setSkillGaps(data.skillGaps);
+      }
+      if (data.careerRole) {
+        setSelectedRole(data.careerRole);
+      }
+      if (data.roleReadiness) {
+        setRoleReadiness(data.roleReadiness);
+      }
       // Navigate to dedicated analysis results page
       navigate('/analysis-results');
     } catch (err: any) {
@@ -98,7 +114,7 @@ export const ResumeAnalysisPage: React.FC = () => {
   };
 
   return (
-    <div className="ca-page-container ca-analysis-page max-w-4xl mx-auto px-4 py-8">
+    <div className="ca-page-container ca-analysis-page">
       {/* Step Progress Tracker */}
       <div className="analysis-stepper-header">
         <div className="stepper-title-wrap">

@@ -41,7 +41,7 @@ export const AnalysisResultsPage: React.FC = () => {
   }
 
   return (
-    <div className="ca-page-container ca-results-page max-w-5xl mx-auto px-4 py-8">
+    <div className="ca-page-container ca-results-page">
       {/* Page Header with Action Bar */}
       <div className="results-page-header">
         <div className="header-text-group">
