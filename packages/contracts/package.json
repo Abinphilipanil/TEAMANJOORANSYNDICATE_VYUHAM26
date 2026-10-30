@@ -1,0 +1,15 @@
+{
+  "name": "@af03/contracts",
+  "version": "1.0.0",
+  "description": "Shared Data Contracts, Interfaces, and Types for AF-03 Career Intelligence Agent",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
+

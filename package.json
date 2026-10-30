@@ -1,0 +1,30 @@
+{
+  "name": "skillgapper-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AF-03: AI-Powered Career and Skill-Gap Analysis Agent",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:api": "npm run dev --workspace=apps/api",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "build": "npm run build --workspaces --if-present",
+    "build:contracts": "npm run build --workspace=packages/contracts",
+    "build:api": "npm run build --workspace=apps/api",
+    "build:web": "npm run build --workspace=apps/web",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "keywords": [
+    "career-agent",
+    "skill-gap-analysis",
+    "learning-workspace",
+    "ai-agent",
+    "af-03"
+  ],
+  "author": "AF-03 Engineering Team",
+  "license": "MIT"
+}
+
