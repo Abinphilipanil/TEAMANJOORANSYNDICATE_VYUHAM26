@@ -1,0 +1,1424 @@
+/* ==========================================================================
+   Career Intelligence Design System
+   Pathfinder: Job Matching, Skill Gaps & Learning Roadmaps
+   ========================================================================== */
+
+:root {
+  --ci-primary: #1677FF;
+  --ci-primary-hover: #0F63D8;
+  --ci-primary-soft: #EFF6FF;
+  --ci-primary-border: #BFDBFE;
+  
+  --ci-emerald: #059669;
+  --ci-emerald-soft: #ECFDF5;
+  --ci-emerald-border: #A7F3D0;
+  
+  --ci-amber: #D97706;
+  --ci-amber-soft: #FFFBEB;
+  --ci-amber-border: #FDE68A;
+  
+  --ci-rose: #DC2626;
+  --ci-rose-soft: #FEF2F2;
+  --ci-rose-border: #FECACA;
+  
+  --ci-indigo: #4F46E5;
+  --ci-indigo-soft: #EEF2FF;
+  --ci-indigo-border: #C7D2FE;
+  
+  --ci-slate-900: #0F172A;
+  --ci-slate-800: #1E293B;
+  --ci-slate-700: #334155;
+  --ci-slate-600: #475569;
+  --ci-slate-500: #64748B;
+  --ci-slate-400: #94A3B8;
+  --ci-slate-200: #E2E8F0;
+  --ci-slate-100: #F1F5F9;
+  --ci-slate-50: #F8FAFC;
+  --ci-white: #FFFFFF;
+
+  --ci-card-radius: 14px;
+  --ci-pill-radius: 9999px;
+  --ci-control-radius: 8px;
+
+  --ci-shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  --ci-shadow-card: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --ci-shadow-hover: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+}
+
+/* ---------------- Global Layout Wrappers ---------------- */
+.ci-view-container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: 100%;
+  animation: ci-fade-in 0.25s ease-out;
+}
+
+@keyframes ci-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------------- Page Header Card ---------------- */
+.ci-page-header {
+  background: var(--ci-white);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: var(--ci-card-radius);
+  padding: 24px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  box-shadow: var(--ci-shadow-subtle);
+  position: relative;
+  overflow: hidden;
+}
+
+.ci-page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1677FF 0%, #38BDF8 100%);
+}
+
+.ci-header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.ci-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ci-primary);
+  background: var(--ci-primary-soft);
+  padding: 3px 10px;
+  border-radius: var(--ci-pill-radius);
+  margin-bottom: 8px;
+}
+
+.ci-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--ci-slate-900);
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  margin: 0 0 6px 0;
+}
+
+.ci-subtitle {
+  font-size: 14px;
+  color: var(--ci-slate-600);
+  line-height: 1.55;
+  margin: 0;
+  max-width: 780px;
+}
+
+.ci-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Search input with icon */
+.ci-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 280px;
+}
+
+.ci-search-icon {
+  position: absolute;
+  left: 12px;
+  width: 16px;
+  height: 16px;
+  color: var(--ci-slate-400);
+  pointer-events: none;
+}
+
+.ci-search-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 14px 0 38px;
+  font-size: 13.5px;
+  color: var(--ci-slate-900);
+  background: var(--ci-slate-50);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: var(--ci-control-radius);
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.ci-search-input:focus {
+  background: var(--ci-white);
+  border-color: var(--ci-primary);
+  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.12);
+}
+
+.ci-search-input::placeholder {
+  color: var(--ci-slate-400);
+}
+
+/* ---------------- Metric Summary Cards Strip ---------------- */
+.ci-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.ci-summary-card {
+  background: var(--ci-white);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: var(--ci-card-radius);
+  padding: 18px 20px;
+  box-shadow: var(--ci-shadow-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ci-summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ci-shadow-card);
+}
+
+.ci-summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ci-summary-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ci-slate-500);
+}
+
+.ci-summary-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ci-summary-icon.icon-blue { background: var(--ci-primary-soft); color: var(--ci-primary); }
+.ci-summary-icon.icon-emerald { background: var(--ci-emerald-soft); color: var(--ci-emerald); }
+.ci-summary-icon.icon-amber { background: var(--ci-amber-soft); color: var(--ci-amber); }
+.ci-summary-icon.icon-rose { background: var(--ci-rose-soft); color: var(--ci-rose); }
+
+.ci-summary-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--ci-slate-900);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.ci-summary-subtext {
+  font-size: 12px;
+  color: var(--ci-slate-500);
+  line-height: 1.4;
+}
+
+/* ---------------- Filter Button Groups ---------------- */
+.ci-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ci-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ci-slate-600);
+  background: var(--ci-white);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: var(--ci-pill-radius);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.ci-filter-btn:hover {
+  background: var(--ci-slate-100);
+  color: var(--ci-slate-900);
+  border-color: var(--ci-slate-300);
+}
+
+.ci-filter-btn.active {
+  background: var(--ci-primary);
+  color: var(--ci-white);
+  border-color: var(--ci-primary);
+  box-shadow: 0 1px 2px rgba(22, 119, 255, 0.25);
+}
+
+/* ---------------- Progress Bar Component ---------------- */
+.ci-progress-bar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ci-progress-track {
+  width: 100%;
+  height: 8px;
+  background: var(--ci-slate-100);
+  border-radius: var(--ci-pill-radius);
+  overflow: hidden;
+  position: relative;
+}
+
+.ci-progress-fill {
+  height: 100%;
+  border-radius: var(--ci-pill-radius);
+  transition: width 0.4s ease-out;
+}
+
+.ci-progress-fill.fill-blue {
+  background: linear-gradient(90deg, #1677FF 0%, #38BDF8 100%);
+}
+
+.ci-progress-fill.fill-emerald {
+  background: linear-gradient(90deg, #059669 0%, #10B981 100%);
+}
+
+.ci-progress-fill.fill-amber {
+  background: linear-gradient(90deg, #D97706 0%, #F59E0B 100%);
+}
+
+.ci-progress-fill.fill-rose {
+  background: linear-gradient(90deg, #DC2626 0%, #F87171 100%);
+}
+
+/* ---------------- Skill Tags & Chips ---------------- */
+.ci-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.ci-skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--ci-pill-radius);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  border: 1px solid transparent;
+  transition: transform 0.15s ease;
+}
+
+.ci-skill-chip:hover {
+  transform: translateY(-1px);
+}
+
+.ci-skill-chip.chip-matched {
+  background: var(--ci-emerald-soft);
+  color: #065F46;
+  border-color: var(--ci-emerald-border);
+}
+
+.ci-skill-chip.chip-gap {
+  background: var(--ci-amber-soft);
+  color: #92400E;
+  border-color: var(--ci-amber-border);
+}
+
+.ci-skill-chip.chip-neutral {
+  background: var(--ci-slate-100);
+  color: var(--ci-slate-700);
+  border-color: var(--ci-slate-200);
+}
+
+/* ---------------- =======================================
+   MODULE A: CAREER EXPLORER & ROLE ALIGNMENT
+   ======================================================= */
+.ci-selected-role-hero {
+  background: var(--ci-white);
+  border: 2px solid var(--ci-primary);
+  border-radius: var(--ci-card-radius);
+  padding: 28px;
+  box-shadow: 0 4px 14px -2px rgba(22, 119, 255, 0.12), var(--ci-shadow-subtle);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ci-hero-badge-pill {
+  position: absolute;
+  top: -12px;
+  left: 28px;
+  background: var(--ci-primary);
+  color: var(--ci-white);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 14px;
+  border-radius: var(--ci-pill-radius);
+  box-shadow: 0 2px 4px rgba(22, 119, 255, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ci-hero-top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.ci-hero-title-group {
+  flex: 1;
+}
+
+.ci-hero-role-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--ci-slate-900);
+  letter-spacing: -0.02em;
+  margin: 0 0 8px 0;
+}
+
+.ci-hero-role-desc {
+  font-size: 14.5px;
+  color: var(--ci-slate-600);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.ci-match-ring-card {
+  background: linear-gradient(135deg, #1677FF 0%, #0F63D8 100%);
+  color: var(--ci-white);
+  padding: 16px 22px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  box-shadow: 0 4px 10px rgba(22, 119, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.ci-ring-score {
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.ci-ring-level {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+/* Supporting Metrics Grid */
+.ci-hero-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  background: var(--ci-slate-50);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+
+.ci-hero-metric-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ci-hero-metric-cell .metric-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ci-slate-500);
+  letter-spacing: 0.05em;
+}
+
+.ci-hero-metric-cell .metric-val {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--ci-slate-900);
+}
+
+.ci-hero-metric-cell .metric-val.text-emerald { color: var(--ci-emerald); }
+.ci-hero-metric-cell .metric-val.text-primary { color: var(--ci-primary); }
+
+/* Fit Rationale Box */
+.ci-fit-rationale-box {
+  background: #F0FDF4;
+  border: 1px solid var(--ci-emerald-border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.ci-fit-rationale-box .fit-icon {
+  color: var(--ci-emerald);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ci-fit-rationale-box .fit-text {
+  font-size: 13.5px;
+  color: #14532D;
+  line-height: 1.55;
+}
+
+.ci-fit-rationale-box .fit-text strong {
+  color: #052E16;
+  margin-right: 4px;
+}
+
+/* Competency Breakdown Split (2 Columns) */
+.ci-competencies-breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.ci-competency-panel {
+  background: var(--ci-slate-50);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ci-competency-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ci-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ci-panel-title.title-matched { color: var(--ci-emerald); }
+.ci-panel-title.title-gap { color: var(--ci-amber); }
+
+.ci-panel-count-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--ci-pill-radius);
+}
+
+.ci-panel-count-badge.badge-matched {
+  background: var(--ci-emerald-soft);
+  color: #065F46;
+}
+
+.ci-panel-count-badge.badge-gap {
+  background: var(--ci-amber-soft);
+  color: #92400E;
+}
+
+/* Hero Footer Actions */
+.ci-hero-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--ci-slate-200);
+  padding-top: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ci-start-hint {
+  font-size: 13px;
+  color: var(--ci-slate-600);
+}
+
+.ci-start-hint strong {
+  color: var(--ci-slate-900);
+}
+
+.ci-action-buttons-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ci-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ci-white);
+  background: var(--ci-primary);
+  border: 1px solid var(--ci-primary);
+  border-radius: var(--ci-control-radius);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(22, 119, 255, 0.25);
+}
+
+.ci-btn-primary:hover {
+  background: var(--ci-primary-hover);
+  border-color: var(--ci-primary-hover);
+  box-shadow: 0 4px 8px rgba(22, 119, 255, 0.3);
+}
+
+.ci-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ci-primary);
+  background: var(--ci-primary-soft);
+  border: 1px solid var(--ci-primary-border);
+  border-radius: var(--ci-control-radius);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ci-btn-secondary:hover {
+  background: #E0EFFF;
+  color: var(--ci-primary-hover);
+}
+
+.ci-btn-active-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #065F46;
+  background: var(--ci-emerald-soft);
+  border: 1px solid var(--ci-emerald-border);
+  border-radius: var(--ci-control-radius);
+  cursor: default;
+}
+
+/* Alternative Roles Grid */
+.ci-section-heading-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.ci-section-title-wrap h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ci-slate-900);
+  margin: 0 0 4px 0;
+}
+
+.ci-section-title-wrap p {
+  font-size: 13px;
+  color: var(--ci-slate-500);
+  margin: 0;
+}
+
+.ci-roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.ci-role-card {
+  background: var(--ci-white);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: var(--ci-card-radius);
+  padding: 22px;
+  box-shadow: var(--ci-shadow-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  position: relative;
+}
+
+.ci-role-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ci-shadow-card);
+  border-color: var(--ci-slate-300);
+}
+
+.ci-role-card.is-selected {
+  border: 2px solid var(--ci-primary);
+  box-shadow: 0 0 0 1px var(--ci-primary), var(--ci-shadow-card);
+}
+
+.ci-role-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ci-role-card-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ci-slate-900);
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.ci-role-match-pill {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: var(--ci-pill-radius);
+  white-space: nowrap;
+}
+
+.ci-role-match-pill.match-high {
+  background: var(--ci-emerald-soft);
+  color: #065F46;
+  border: 1px solid var(--ci-emerald-border);
+}
+
+.ci-role-match-pill.match-med {
+  background: var(--ci-primary-soft);
+  color: var(--ci-primary);
+  border: 1px solid var(--ci-primary-border);
+}
+
+.ci-role-desc {
+  font-size: 13px;
+  color: var(--ci-slate-600);
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ci-role-stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--ci-slate-50);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+}
+
+.ci-stat-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ci-stat-group .lbl {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ci-slate-400);
+}
+
+.ci-stat-group .val {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ci-slate-800);
+}
+
+.ci-role-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--ci-slate-100);
+  gap: 12px;
+}
+
+.ci-role-counts-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.ci-count-tag.tag-matched { color: var(--ci-emerald); }
+.ci-count-tag.tag-gap { color: var(--ci-amber); }
+
+/* ---------------- =======================================
+   MODULE B: SKILL PROFILING & GAP ANALYSIS
+   ======================================================= */
+.ci-section-box {
+  background: var(--ci-white);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: var(--ci-card-radius);
+  padding: 24px 28px;
+  box-shadow: var(--ci-shadow-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ci-section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.ci-section-header-title-wrap h2 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ci-slate-900);
+  margin: 0 0 4px 0;
+}
+
+.ci-section-header-title-wrap p {
+  font-size: 13px;
+  color: var(--ci-slate-500);
+  margin: 0;
+}
+
+/* Skills Grid */
+.ci-skills-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.ci-skill-card {
+  background: var(--ci-slate-50);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.ci-skill-card:hover {
+  background: var(--ci-white);
+  border-color: var(--ci-primary-border);
+  transform: translateY(-2px);
+  box-shadow: var(--ci-shadow-subtle);
+}
+
+.ci-skill-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ci-skill-category-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ci-slate-500);
+  letter-spacing: 0.04em;
+}
+
+.ci-skill-level-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--ci-pill-radius);
+}
+
+.ci-skill-level-badge.level-advanced {
+  background: var(--ci-emerald-soft);
+  color: #065F46;
+  border: 1px solid var(--ci-emerald-border);
+}
+
+.ci-skill-level-badge.level-intermediate {
+  background: var(--ci-primary-soft);
+  color: var(--ci-primary);
+  border: 1px solid var(--ci-primary-border);
+}
+
+.ci-skill-level-badge.level-beginner {
+  background: var(--ci-slate-100);
+  color: var(--ci-slate-600);
+  border: 1px solid var(--ci-slate-200);
+}
+
+.ci-skill-card-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ci-slate-900);
+  margin: 0;
+}
+
+.ci-skill-meter-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.ci-meter-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.ci-meter-info span { color: var(--ci-slate-500); }
+.ci-meter-info strong { color: var(--ci-slate-900); font-weight: 700; }
+
+/* Skill Gaps List & Detailed Items */
+.ci-gaps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ci-gap-item-card {
+  background: var(--ci-white);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: 12px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--ci-shadow-subtle);
+  transition: all 0.15s ease;
+}
+
+.ci-gap-item-card:hover {
+  border-color: var(--ci-slate-300);
+  box-shadow: var(--ci-shadow-card);
+}
+
+.ci-gap-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.ci-gap-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ci-priority-pill {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: var(--ci-pill-radius);
+}
+
+.ci-priority-pill.priority-critical {
+  background: var(--ci-rose-soft);
+  color: var(--ci-rose);
+  border: 1px solid var(--ci-rose-border);
+}
+
+.ci-priority-pill.priority-high {
+  background: var(--ci-amber-soft);
+  color: var(--ci-amber);
+  border: 1px solid var(--ci-amber-border);
+}
+
+.ci-priority-pill.priority-medium {
+  background: var(--ci-primary-soft);
+  color: var(--ci-primary);
+  border: 1px solid var(--ci-primary-border);
+}
+
+.ci-gap-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ci-slate-900);
+  margin: 0;
+}
+
+.ci-gap-category {
+  font-size: 12px;
+  color: var(--ci-slate-500);
+  background: var(--ci-slate-100);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.ci-gap-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ci-slate-600);
+  background: var(--ci-slate-50);
+  border: 1px solid var(--ci-slate-200);
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* Dual Comparative Progress Bar */
+.ci-gap-comparison-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--ci-slate-50);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.ci-comparison-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+}
+
+.ci-cur-label strong { color: var(--ci-primary); }
+.ci-tar-label strong { color: var(--ci-emerald); }
+
+.ci-gap-delta-pill {
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--ci-amber-soft);
+  color: var(--ci-amber);
+  border: 1px solid var(--ci-amber-border);
+  padding: 2px 8px;
+  border-radius: var(--ci-pill-radius);
+}
+
+.ci-dual-meter-track {
+  width: 100%;
+  height: 9px;
+  background: var(--ci-slate-200);
+  border-radius: var(--ci-pill-radius);
+  position: relative;
+  overflow: hidden;
+}
+
+.ci-dual-meter-target {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba(5, 150, 105, 0.25);
+  border-radius: var(--ci-pill-radius);
+}
+
+.ci-dual-meter-current {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--ci-primary);
+  border-radius: var(--ci-pill-radius);
+}
+
+.ci-gap-action-box {
+  background: var(--ci-primary-soft);
+  border: 1px solid var(--ci-primary-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: #1E3A8A;
+  line-height: 1.5;
+}
+
+.ci-gap-action-box strong {
+  color: #1E3A8A;
+}
+
+/* ---------------- =======================================
+   MODULE C: PERSONALIZED LEARNING ROADMAP
+   ======================================================= */
+.ci-strategy-card {
+  background: linear-gradient(135deg, #EFF6FF 0%, #F8FAFC 100%);
+  border: 1px solid #BFDBFE;
+  border-radius: var(--ci-card-radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: var(--ci-shadow-subtle);
+}
+
+.ci-strategy-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.ci-strategy-icon-box {
+  width: 44px;
+  height: 44px;
+  background: var(--ci-primary);
+  color: var(--ci-white);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 6px rgba(22, 119, 255, 0.25);
+}
+
+.ci-strategy-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ci-slate-900);
+  margin: 0 0 6px 0;
+}
+
+.ci-strategy-desc {
+  font-size: 14px;
+  color: var(--ci-slate-700);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.ci-strategy-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  background: var(--ci-white);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.ci-strategy-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ci-strategy-metric .lbl {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ci-slate-500);
+}
+
+.ci-strategy-metric .val {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ci-slate-900);
+}
+
+.ci-strategy-metric .val.text-emerald { color: var(--ci-emerald); }
+
+/* Timeline Phases */
+.ci-roadmap-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+.ci-timeline-phase-card {
+  background: var(--ci-white);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: var(--ci-card-radius);
+  padding: 24px;
+  box-shadow: var(--ci-shadow-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.ci-timeline-phase-card:hover {
+  box-shadow: var(--ci-shadow-card);
+}
+
+.ci-timeline-phase-card.phase-completed {
+  border-left: 4px solid var(--ci-emerald);
+}
+
+.ci-timeline-phase-card.phase-in-progress {
+  border-left: 4px solid var(--ci-primary);
+  box-shadow: 0 4px 12px -2px rgba(22, 119, 255, 0.1), var(--ci-shadow-subtle);
+}
+
+.ci-timeline-phase-card.phase-upcoming {
+  border-left: 4px solid var(--ci-slate-300);
+  opacity: 0.92;
+}
+
+.ci-phase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.ci-phase-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.ci-phase-num-pill {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--ci-slate-100);
+  color: var(--ci-slate-700);
+}
+
+.ci-phase-status-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--ci-pill-radius);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ci-phase-status-pill.status-completed {
+  background: var(--ci-emerald-soft);
+  color: #065F46;
+  border: 1px solid var(--ci-emerald-border);
+}
+
+.ci-phase-status-pill.status-in-progress {
+  background: var(--ci-primary-soft);
+  color: var(--ci-primary);
+  border: 1px solid var(--ci-primary-border);
+}
+
+.ci-phase-status-pill.status-upcoming {
+  background: var(--ci-slate-100);
+  color: var(--ci-slate-600);
+  border: 1px solid var(--ci-slate-200);
+}
+
+.ci-phase-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ci-slate-900);
+  margin: 0;
+}
+
+.ci-phase-duration-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--ci-slate-500);
+  white-space: nowrap;
+}
+
+.ci-phase-summary {
+  font-size: 14px;
+  color: var(--ci-slate-600);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Phase Progress Bar Strip */
+.ci-phase-progress-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ci-phase-progress-strip .progress-wrap {
+  flex: 1;
+}
+
+.ci-phase-progress-pct {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ci-slate-700);
+  white-space: nowrap;
+}
+
+/* Learning Steps List */
+.ci-steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.ci-steps-header-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ci-slate-500);
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.ci-step-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--ci-slate-50);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: 8px;
+  padding: 10px 14px;
+  gap: 12px;
+  transition: all 0.15s ease;
+}
+
+.ci-step-row:hover {
+  background: var(--ci-white);
+  border-color: var(--ci-primary-border);
+}
+
+.ci-step-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ci-step-check-glyph {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ci-step-check-glyph.glyph-completed {
+  background: var(--ci-emerald-soft);
+  color: var(--ci-emerald);
+  border: 1px solid var(--ci-emerald-border);
+}
+
+.ci-step-check-glyph.glyph-in-progress {
+  background: var(--ci-primary-soft);
+  color: var(--ci-primary);
+  border: 1px solid var(--ci-primary-border);
+}
+
+.ci-step-check-glyph.glyph-upcoming {
+  background: var(--ci-slate-100);
+  color: var(--ci-slate-400);
+  border: 1px solid var(--ci-slate-200);
+}
+
+.ci-step-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ci-slate-800);
+}
+
+.ci-step-duration {
+  font-size: 12px;
+  color: var(--ci-slate-500);
+  white-space: nowrap;
+}
+
+/* ---------------- Responsive Rules ---------------- */
+@media (max-width: 1024px) {
+  .ci-hero-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ci-competencies-breakdown {
+    grid-template-columns: 1fr;
+  }
+  .ci-strategy-metrics-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .ci-page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ci-search-box {
+    min-width: 100%;
+  }
+  .ci-hero-top-section {
+    flex-direction: column;
+  }
+  .ci-match-ring-card {
+    align-self: flex-start;
+  }
+  .ci-hero-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  .ci-roles-grid {
+    grid-template-columns: 1fr;
+  }
+  .ci-skills-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ci-view-container {
+    animation: none;
+  }
+  .ci-progress-fill,
+  .ci-role-card,
+  .ci-summary-card {
+    transition: none;
+  }
+}
+

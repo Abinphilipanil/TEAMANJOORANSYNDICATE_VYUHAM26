@@ -25,7 +25,7 @@ export const SavedPage: React.FC = () => {
   ];
 
   return (
-    <div className="ca-page-container ca-saved-page max-w-6xl mx-auto px-4 py-8">
+    <div className="ca-page-container ca-saved-page">
       <div className="saved-page-header">
         <span className="page-badge">Saved Items</span>
         <h1 className="page-title">Saved Opportunities & Roadmaps</h1>

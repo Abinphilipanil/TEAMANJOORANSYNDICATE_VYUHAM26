@@ -371,17 +371,100 @@ export interface Notification {
 // 3. API Request / Response DTOs
 // ==========================================
 
+export interface MatchedSkillItem {
+  name: string;
+  category: string;
+  matchType: string;
+  context: string;
+}
+
+export interface PartiallyMatchedSkillItem {
+  name: string;
+  category: string;
+  matchType: string;
+  notes: string;
+}
+
+export interface MissingSkillItem {
+  name: string;
+  category: string;
+  priority: 'Critical' | 'High' | 'Medium';
+  importance: string;
+}
+
+export interface ResumeImprovementSuggestion {
+  id: string;
+  section: string;
+  title: string;
+  description: string;
+}
+
+export interface SkillDevelopmentSuggestion {
+  id: string;
+  skill: string;
+  timeEstimate: string;
+  action: string;
+}
+
+export interface ResumeAnalysisResult {
+  isPrototypeData: boolean;
+  analyzedAt: string;
+  resumeMeta: {
+    fileName: string;
+    fileSizeKb: number;
+    extractedWordCount: number;
+  };
+  jobMeta: {
+    characterCount: number;
+    estimatedRequirementsCount: number;
+  };
+  overallMatch: {
+    score: number;
+    category: string;
+    summary: string;
+    confidenceScore: string;
+    aiScore?: number;
+    ruleBasedScore?: number;
+  };
+  readinessAssessment: {
+    status: string;
+    statusLevel: 'high' | 'moderate' | 'early';
+    keyStrength: string;
+    primaryRisk: string;
+    recommendedTimeline: string;
+  };
+  skillsBreakdown: {
+    matched: MatchedSkillItem[];
+    partiallyMatched: PartiallyMatchedSkillItem[];
+    missing: MissingSkillItem[];
+  };
+  gapSummary: {
+    totalRequiredSkills: number;
+    matchedCount: number;
+    partialCount: number;
+    missingCount: number;
+    coveragePercentage: number;
+  };
+  actionableSuggestions: {
+    resumeImprovements: ResumeImprovementSuggestion[];
+    skillDevelopment: SkillDevelopmentSuggestion[];
+  };
+  strengths?: string[];
+  weaknesses?: string[];
+}
+
 export interface AnalyzeCareerRequest {
   targetRoleId?: string;
   customRoleTitle?: string;
-  fullName: string;
-  email: string;
+  fullName?: string;
+  email?: string;
   profileText?: string;
+  jobDescription?: string;
   resumeFileName?: string;
   resumeBase64?: string;
   linkedInUrl?: string;
   githubUrl?: string;
-  preferences: LearningPreferences;
+  preferences?: LearningPreferences;
 }
 
 export interface AnalyzeCareerResponse {
@@ -394,6 +477,7 @@ export interface AnalyzeCareerResponse {
   roleReadiness: RoleReadiness;
   roadmap: Roadmap;
   workspace: LearningWorkspace;
+  analysisResult?: ResumeAnalysisResult;
 }
 
 export interface CreateWorkspaceRequest {
@@ -454,4 +538,3 @@ export interface EmailReminderJobResult {
     reason?: string;
   }>;
 }
-

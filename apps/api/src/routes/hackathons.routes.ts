@@ -25,3 +25,4 @@ router.get('/summary', (_req: Request, res: Response, next: NextFunction) => {
 });
 
 export default router;
+

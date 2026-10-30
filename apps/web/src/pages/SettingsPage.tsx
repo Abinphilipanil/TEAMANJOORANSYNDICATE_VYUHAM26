@@ -16,7 +16,7 @@ export const SettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="ca-page-container ca-settings-page max-w-4xl mx-auto px-4 py-8">
+    <div className="ca-page-container ca-settings-page">
       <div className="settings-page-header">
         <span className="page-badge">Configuration</span>
         <h1 className="page-title">Account & Platform Settings</h1>

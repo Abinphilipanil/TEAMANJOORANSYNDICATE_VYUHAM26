@@ -1,6 +1,9 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
+// Load environment variables from apps/api/.env, root .env, and cwd
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 dotenv.config();
 
 export const ENV = {
@@ -17,5 +20,13 @@ export const ENV = {
   SMTP_PASS: process.env.SMTP_PASS || '',
   EMAIL_FROM: process.env.EMAIL_FROM || 'notifications@af03-skillgapper.internal',
   INACTIVITY_THRESHOLD_DAYS: parseInt(process.env.INACTIVITY_THRESHOLD_DAYS || '7', 10),
-};
 
+  // AI Provider Configuration (Groq, Claude extension point, or mock)
+  AI_PROVIDER: process.env.AI_PROVIDER || 'groq',
+  GROQ_API_KEY: process.env.GROQ_API_KEY || '',
+  // Currently supported Groq model suitable for high-quality structured JSON output
+  // Alternative models: llama-3.1-8b-instant, mixtral-8x7b-32768
+  GROQ_MODEL: process.env.GROQ_MODEL || 'openai/gpt-oss-120b',
+  ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || '',
+  CLAUDE_MODEL: process.env.CLAUDE_MODEL || 'claude-3-5-sonnet-20241022',
+};

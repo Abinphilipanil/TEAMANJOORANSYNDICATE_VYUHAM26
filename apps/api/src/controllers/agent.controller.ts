@@ -10,9 +10,9 @@ export class AgentController {
     try {
       const payload: AnalyzeCareerRequest = req.body;
 
-      if (!payload.fullName || !payload.email) {
-        return res.status(400).json({ error: 'Full name and email are required for career analysis.' });
-      }
+      // Ensure sensible defaults for candidate profile fields if not provided
+      payload.fullName = payload.fullName || 'Career Candidate';
+      payload.email = payload.email || 'candidate@careeragent.ai';
 
       if (!payload.preferences) {
         payload.preferences = {
@@ -27,10 +27,18 @@ export class AgentController {
       }
 
       const result = await agentOrchestrator.analyzeCareerJourney(payload);
-      return res.status(200).json(result);
+
+      // Return a unified payload so both the ResultsDashboard and agent views work seamlessly
+      return res.status(200).json({
+        ...result.analysisResult,
+        ...result,
+        analysisResult: result.analysisResult,
+      });
     } catch (error: any) {
       console.error('Agent analysis error:', error);
-      return res.status(500).json({ error: error.message });
+      return res.status(500).json({
+        error: error.message || 'Resume analysis failed. Please verify your inputs and API configuration.',
+      });
     }
   }
 
@@ -65,4 +73,3 @@ export class AgentController {
 }
 
 export const agentController = new AgentController();
-
