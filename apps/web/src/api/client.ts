@@ -52,14 +52,15 @@ export const apiClient = {
     if (resumeFile) {
       const formData = new FormData();
       formData.append('resume', resumeFile);
-      formData.append('fullName', payload.fullName);
-      formData.append('email', payload.email);
+      formData.append('fullName', payload.fullName || 'Career Candidate');
+      formData.append('email', payload.email || 'candidate@careeragent.ai');
+      if (payload.jobDescription) formData.append('jobDescription', payload.jobDescription);
       if (payload.targetRoleId) formData.append('targetRoleId', payload.targetRoleId);
       if (payload.customRoleTitle) formData.append('customRoleTitle', payload.customRoleTitle);
       if (payload.profileText) formData.append('profileText', payload.profileText);
       if (payload.linkedInUrl) formData.append('linkedInUrl', payload.linkedInUrl);
       if (payload.githubUrl) formData.append('githubUrl', payload.githubUrl);
-      formData.append('preferences', JSON.stringify(payload.preferences));
+      if (payload.preferences) formData.append('preferences', JSON.stringify(payload.preferences));
 
       const res = await fetch(`${API_BASE}/agent/analyze`, {
         method: 'POST',
@@ -164,5 +165,19 @@ export const apiClient = {
     const res = await fetch(`${API_BASE}/jobs/notification-logs`);
     return handleResponse<Notification[]>(res);
   },
-};
 
+  // Hackathons
+  async getHackathons(params?: { domain?: string; search?: string }): Promise<any> {
+    const q = new URLSearchParams();
+    if (params?.domain && params.domain !== 'all') q.append('domain', params.domain);
+    if (params?.search && params.search.trim()) q.append('search', params.search.trim());
+    const query = q.toString() ? `?${q.toString()}` : '';
+    const res = await fetch(`${API_BASE}/hackathons${query}`);
+    return handleResponse<any>(res);
+  },
+
+  async getHackathonSummary(): Promise<any> {
+    const res = await fetch(`${API_BASE}/summary`);
+    return handleResponse<any>(res);
+  },
+};
