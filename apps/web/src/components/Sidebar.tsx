@@ -8,21 +8,30 @@ import {
   CheckSquare, 
   Sparkles, 
   UserCircle2, 
-  ChevronRight,
-  TrendingUp
+  TrendingUp,
+  FileText,
+  Target,
+  Layers,
+  Bookmark,
+  Settings
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export const Sidebar: React.FC = () => {
-  const { roadmap, roleReadiness } = useApp();
+  const { roadmap } = useApp();
 
   const navItems = [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { to: '/resume-analysis', label: 'Resume Analysis', icon: FileText },
+    { to: '/job-matching', label: 'Job Matching', icon: Target },
+    { to: '/skill-gaps', label: 'Skill Gaps', icon: Layers },
+    { to: '/learning-roadmap', label: 'Learning Roadmap', icon: Milestone },
     { to: '/careers', label: 'Explore Careers', icon: Compass },
-    { to: '/roadmaps', label: 'My Roadmaps', icon: Milestone },
     { to: '/workspace', label: 'Learning Workspace', icon: FolderKanban },
     { to: '/progress', label: 'Progress Tracking', icon: CheckSquare },
     { to: '/opportunities', label: 'Opportunities', icon: Sparkles },
+    { to: '/saved', label: 'Saved Items', icon: Bookmark },
+    { to: '/settings', label: 'Settings', icon: Settings },
     { to: '/profile', label: 'My Profile', icon: UserCircle2 },
   ];
 
@@ -34,7 +43,7 @@ export const Sidebar: React.FC = () => {
           <Compass className="w-4 h-4" />
         </div>
         <div>
-          <span className="font-bold text-base text-white tracking-tight">SkillGapper</span>
+          <span className="font-bold text-base text-white tracking-tight">CareerAgent</span>
           <span className="ml-1.5 text-[9px] uppercase font-mono px-1 py-0.5 rounded bg-brand-500/20 text-brand-300 font-semibold">AF-03</span>
         </div>
       </div>
@@ -69,7 +78,7 @@ export const Sidebar: React.FC = () => {
               key={item.to}
               to={item.to}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                `flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium transition-colors ${
                   isActive
                     ? 'bg-brand-600 text-white shadow-sm'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
@@ -95,3 +104,4 @@ export const Sidebar: React.FC = () => {
   );
 };
 
+export default Sidebar;
