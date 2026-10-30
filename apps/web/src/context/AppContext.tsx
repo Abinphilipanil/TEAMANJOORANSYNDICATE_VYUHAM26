@@ -8,6 +8,7 @@ import {
   RoleReadiness 
 } from '@af03/contracts';
 import { apiClient } from '../api/client';
+import { ResumeAnalysisResult } from '../services/resumeAnalysisService';
 
 interface AppContextType {
   selectedRole: CareerRole | null;
@@ -22,6 +23,12 @@ interface AppContextType {
   setSkillGaps: (gaps: SkillGap[]) => void;
   roleReadiness: RoleReadiness | null;
   setRoleReadiness: (readiness: RoleReadiness | null) => void;
+  resumeAnalysisResult: ResumeAnalysisResult | null;
+  setResumeAnalysisResult: (res: ResumeAnalysisResult | null) => void;
+  analysisResumeFile: File | null;
+  setAnalysisResumeFile: (file: File | null) => void;
+  analysisJobDescription: string;
+  setAnalysisJobDescription: (jd: string) => void;
   refreshRoadmap: () => Promise<void>;
   refreshWorkspace: () => Promise<void>;
 }
@@ -52,6 +59,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [skillGaps, setSkillGaps] = useState<SkillGap[]>(() => {
     const saved = localStorage.getItem('af03_skill_gaps');
     return saved ? JSON.parse(saved) : [];
+  });
+
+  const [resumeAnalysisResult, setResumeAnalysisResult] = useState<ResumeAnalysisResult | null>(() => {
+    const saved = localStorage.getItem('af03_resume_analysis');
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const [analysisResumeFile, setAnalysisResumeFile] = useState<File | null>(null);
+
+  const [analysisJobDescription, setAnalysisJobDescription] = useState<string>(() => {
+    return localStorage.getItem('af03_analysis_job_desc') || '';
   });
 
   const [roleReadiness, setRoleReadiness] = useState<RoleReadiness | null>(() => {
@@ -90,6 +108,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     else localStorage.removeItem('af03_role_readiness');
   }, [roleReadiness]);
 
+  useEffect(() => {
+    if (resumeAnalysisResult) localStorage.setItem('af03_resume_analysis', JSON.stringify(resumeAnalysisResult));
+    else localStorage.removeItem('af03_resume_analysis');
+  }, [resumeAnalysisResult]);
+
+  useEffect(() => {
+    if (analysisJobDescription) localStorage.setItem('af03_analysis_job_desc', analysisJobDescription);
+    else localStorage.removeItem('af03_analysis_job_desc');
+  }, [analysisJobDescription]);
+
   const refreshRoadmap = async () => {
     if (roadmap) {
       try {
@@ -127,6 +155,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setSkillGaps,
         roleReadiness,
         setRoleReadiness,
+        resumeAnalysisResult,
+        setResumeAnalysisResult,
+        analysisResumeFile,
+        setAnalysisResumeFile,
+        analysisJobDescription,
+        setAnalysisJobDescription,
         refreshRoadmap,
         refreshWorkspace,
       }}

@@ -1,3 +1,4 @@
+@import './styles/careerAgent.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -25,4 +26,3 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
-

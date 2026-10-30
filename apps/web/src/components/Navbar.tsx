@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Compass, Sparkles, BookOpen, LayoutDashboard, ArrowRight } from 'lucide-react';
+import { Compass, Sparkles, BookOpen, LayoutDashboard, ArrowRight, FileText } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export const Navbar: React.FC = () => {
@@ -19,7 +19,7 @@ export const Navbar: React.FC = () => {
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-lg text-slate-900 tracking-tight">SkillGapper</span>
+              <span className="font-extrabold text-lg text-slate-900 tracking-tight">CareerAgent</span>
               <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-brand-100 text-brand-700 font-mono">AF-03</span>
             </div>
             <p className="text-[10px] text-slate-500 -mt-1 hidden sm:block">AI-Powered Career & Skill-Gap Intelligence</p>
@@ -29,9 +29,22 @@ export const Navbar: React.FC = () => {
         {/* Navigation links */}
         <nav className="hidden md:flex items-center gap-1">
           <Link
+            to="/resume-analysis"
+            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              isActive('/resume-analysis')
+                ? 'text-brand-700 bg-brand-50'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            <span className="flex items-center gap-1.5">
+              <FileText className="w-4 h-4" />
+              Resume Analyzer
+            </span>
+          </Link>
+          <Link
             to="/careers"
             className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              isActive('/careers') || isActive('/')
+              isActive('/careers')
                 ? 'text-brand-700 bg-brand-50'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
@@ -79,15 +92,15 @@ export const Navbar: React.FC = () => {
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold shadow-sm transition-all shadow-brand-600/20"
             >
               <LayoutDashboard className="w-4 h-4" />
-              <span>Resume Workspace</span>
+              <span>Dashboard</span>
             </Link>
           ) : (
             <Link
-              to="/onboarding"
+              to="/resume-analysis"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold shadow-sm transition-all"
             >
               <Sparkles className="w-4 h-4 text-brand-300" />
-              <span>Start Analysis</span>
+              <span>Analyse Resume</span>
               <ArrowRight className="w-4 h-4 text-slate-400" />
             </Link>
           )}
@@ -97,3 +110,4 @@ export const Navbar: React.FC = () => {
   );
 };
 
+export default Navbar;

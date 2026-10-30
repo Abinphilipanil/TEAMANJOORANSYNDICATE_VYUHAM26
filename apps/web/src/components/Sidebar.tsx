@@ -1,25 +1,42 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
-  LayoutDashboard, 
-  Compass, 
-  Milestone, 
-  FolderKanban, 
-  CheckSquare, 
-  Sparkles, 
-  UserCircle2, 
-  ChevronRight,
-  TrendingUp
+  Home,
+  FileText,
+  Compass,
+  Layers,
+  Milestone,
+  Bookmark,
+  Settings,
+  FolderKanban,
+  CheckSquare,
+  Sparkles,
+  UserCircle2,
+  TrendingUp,
+  X,
+  Trophy
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
-export const Sidebar: React.FC = () => {
-  const { roadmap, roleReadiness } = useApp();
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
 
-  const navItems = [
-    { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { to: '/careers', label: 'Explore Careers', icon: Compass },
-    { to: '/roadmaps', label: 'My Roadmaps', icon: Milestone },
+export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => {
+  const { roadmap } = useApp();
+
+  const primaryNavItems = [
+    { to: '/', label: 'Home', icon: Home, end: true },
+    { to: '/resume-analysis', label: 'Resume Analyzer', icon: FileText },
+    { to: '/careers', label: 'Career Explorer', icon: Compass },
+    { to: '/skill-gaps', label: 'Skill Gaps', icon: Layers },
+    { to: '/learning-roadmap', label: 'Learning Roadmap', icon: Milestone },
+    { to: '/hackathons', label: 'Hackathons', icon: Trophy },
+    { to: '/saved', label: 'Saved', icon: Bookmark },
+  ];
+
+  const teamWorkspaceItems = [
     { to: '/workspace', label: 'Learning Workspace', icon: FolderKanban },
     { to: '/progress', label: 'Progress Tracking', icon: CheckSquare },
     { to: '/opportunities', label: 'Opportunities', icon: Sparkles },
@@ -27,71 +44,113 @@ export const Sidebar: React.FC = () => {
   ];
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 h-screen sticky top-0 border-r border-slate-800">
-      {/* Brand Header */}
-      <div className="h-16 flex items-center px-6 border-b border-slate-800/80 gap-2.5">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-brand-400 flex items-center justify-center text-white shadow-sm">
-          <Compass className="w-4 h-4" />
-        </div>
-        <div>
-          <span className="font-bold text-base text-white tracking-tight">SkillGapper</span>
-          <span className="ml-1.5 text-[9px] uppercase font-mono px-1 py-0.5 rounded bg-brand-500/20 text-brand-300 font-semibold">AF-03</span>
-        </div>
-      </div>
-
-      {/* Target Role Pill */}
-      {roadmap && (
-        <div className="p-4 mx-3 my-3 rounded-xl bg-slate-800/70 border border-slate-700/60">
-          <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Active Career Track</div>
-          <div className="font-semibold text-white text-sm truncate mt-0.5">{roadmap.targetRoleTitle}</div>
-          <div className="mt-2 flex items-center justify-between text-xs text-slate-400">
-            <span className="flex items-center gap-1">
-              <TrendingUp className="w-3.5 h-3.5 text-brand-400" />
-              <span>Readiness</span>
-            </span>
-            <span className="font-bold text-brand-400">{roadmap.currentReadiness}%</span>
-          </div>
-          <div className="w-full bg-slate-700 h-1.5 rounded-full mt-1.5 overflow-hidden">
-            <div
-              className="bg-brand-500 h-full rounded-full transition-all duration-500"
-              style={{ width: `${roadmap.currentReadiness}%` }}
-            />
-          </div>
-        </div>
+    <>
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div
+          className="sidebar-backdrop"
+          onClick={onClose}
+          aria-hidden="true"
+        />
       )}
 
-      {/* Nav List */}
-      <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto custom-scrollbar">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-brand-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                }`
-              }
-            >
-              <Icon className="w-4 h-4 flex-shrink-0" />
-              <span>{item.label}</span>
-            </NavLink>
-          );
-        })}
-      </nav>
-
-      {/* Bottom Footer Info */}
-      <div className="p-4 border-t border-slate-800 text-[11px] text-slate-500">
-        <div className="flex items-center justify-between">
-          <span>Agent Engine</span>
-          <span className="text-emerald-400 font-medium">Online</span>
+      <aside className={`ca-sidebar ${isOpen ? 'sidebar-open' : ''}`}>
+        {/* Logo and Brand Header */}
+        <div className="sidebar-brand-header">
+          <div className="sidebar-brand-logo">
+            <div className="brand-icon-box">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <span className="brand-text">CareerAgent AI</span>
+          </div>
+          <button
+            type="button"
+            className="sidebar-close-btn"
+            onClick={onClose}
+            aria-label="Close navigation"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
-        <div className="text-[10px] text-slate-600 mt-1">Local Sandboxed Storage</div>
-      </div>
-    </aside>
+
+        {/* Active Track Card (Clean, light theme) */}
+        {roadmap && (
+          <div className="mx-3 my-2 p-3 rounded-xl bg-blue-50/70 border border-blue-100">
+            <div className="text-[10px] uppercase font-bold text-blue-700 tracking-wider">Active Track</div>
+            <div className="font-semibold text-slate-800 text-xs truncate mt-0.5">{roadmap.targetRoleTitle}</div>
+            <div className="mt-1.5 flex items-center justify-between text-[11px] text-slate-500">
+              <span className="flex items-center gap-1">
+                <TrendingUp className="w-3 h-3 text-brand-600" />
+                <span>Readiness</span>
+              </span>
+              <span className="font-bold text-brand-600">{roadmap.currentReadiness}%</span>
+            </div>
+            <div className="w-full bg-blue-100 h-1.5 rounded-full mt-1 overflow-hidden">
+              <div
+                className="bg-brand-600 h-full rounded-full transition-all duration-500"
+                style={{ width: `${roadmap.currentReadiness}%` }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Main Navigation List */}
+        <nav className="sidebar-nav-container" aria-label="Sidebar Navigation">
+          <ul className="sidebar-nav-list">
+            {primaryNavItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <li key={item.to}>
+                  <NavLink
+                    to={item.to}
+                    end={item.end}
+                    onClick={onClose}
+                    className={({ isActive }) => `sidebar-nav-item ${isActive ? 'active' : ''}`}
+                  >
+                    <Icon className="nav-item-icon" />
+                    <span className="nav-item-label">{item.label}</span>
+                  </NavLink>
+                </li>
+              );
+            })}
+
+            {/* Team Extended Features Section */}
+            <li className="pt-3 pb-1 px-3">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">Platform</span>
+            </li>
+
+            {teamWorkspaceItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <li key={item.to}>
+                  <NavLink
+                    to={item.to}
+                    onClick={onClose}
+                    className={({ isActive }) => `sidebar-nav-item ${isActive ? 'active' : ''}`}
+                  >
+                    <Icon className="nav-item-icon" />
+                    <span className="nav-item-label">{item.label}</span>
+                  </NavLink>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        {/* Settings Anchored at Bottom */}
+        <div className="sidebar-bottom-section">
+          <NavLink
+            to="/settings"
+            onClick={onClose}
+            className={({ isActive }) => `sidebar-nav-item settings-item ${isActive ? 'active' : ''}`}
+          >
+            <Settings className="nav-item-icon" />
+            <span className="nav-item-label">Settings</span>
+          </NavLink>
+        </div>
+      </aside>
+    </>
   );
 };
 
+export default Sidebar;
