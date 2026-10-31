@@ -101,7 +101,7 @@ export const LearningRoadmapPage: React.FC = () => {
         roadmap={activeRoadmap}
         targetRoleTitle={targetRoleTitle}
         strategy={dynamicResult.strategy}
-        onNavigateToWorkspace={() => navigate('/workspace')}
+        onNavigateToWorkspace={() => navigate('/skill-gaps')}
       />
     </div>
   );

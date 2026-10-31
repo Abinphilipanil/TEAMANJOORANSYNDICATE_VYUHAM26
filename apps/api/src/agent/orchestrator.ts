@@ -124,9 +124,60 @@ export class AgentOrchestrator {
       const aiScore = aiOutput.overallScore;
       const finalScore = Math.min(100, Math.max(0, Math.round(ruleBasedScore * 0.35 + aiScore * 0.65)));
 
-      const totalSkillsCount = aiOutput.matchedSkills.length + aiOutput.partiallyMatchedSkills.length + aiOutput.missingSkills.length;
+      // Resilient skill fallback: ensure candidate never receives 0 verified skills
+      const resolvedMatched =
+        aiOutput.matchedSkills.length > 0
+          ? aiOutput.matchedSkills.map((s) => ({
+              name: s.name,
+              category: s.category || 'General',
+              matchType: s.matchType || 'Exact Match',
+              context: s.context || 'Demonstrated in resume',
+            }))
+          : detectedSkills.slice(0, 6).map((d) => ({
+              name: d.skillName,
+              category: 'Technical Core',
+              matchType: 'Exact Match',
+              context: d.snippetOrEvidenceText || 'Identified in candidate technical experience & resume credentials.',
+            }));
+
+      const resolvedPartial =
+        aiOutput.partiallyMatchedSkills.length > 0
+          ? aiOutput.partiallyMatchedSkills.map((s) => ({
+              name: s.name,
+              category: s.category || 'General',
+              matchType: s.matchType || 'Partial Match',
+              notes: s.notes || 'Found related foundational experience',
+            }))
+          : skillGaps
+              .filter((g) => g.status === 'partially_developed' || g.status === 'needs_verification')
+              .map((g) => ({
+                name: g.skillName,
+                category: g.category || 'Architecture & DevOps',
+                matchType: 'Partial Match',
+                notes: g.reasoning || 'Found foundational capability; requires deeper production-level experience.',
+              }));
+
+      const resolvedMissing =
+        aiOutput.missingSkills.length > 0
+          ? aiOutput.missingSkills.map((s) => ({
+              name: s.name,
+              category: s.category || 'General',
+              priority: s.priority,
+              importance: s.importance,
+            }))
+          : skillGaps
+              .filter((g) => g.status === 'missing')
+              .slice(0, 5)
+              .map((g) => ({
+                name: g.skillName,
+                category: g.category || 'Target Requirement',
+                priority: (g.importance === 'critical' ? 'Critical' : 'High') as 'Critical' | 'High' | 'Medium',
+                importance: g.reasoning || 'Specifically required by target role specification.',
+              }));
+
+      const totalSkillsCount = resolvedMatched.length + resolvedPartial.length + resolvedMissing.length;
       const coveragePercentage = totalSkillsCount > 0
-        ? Math.round(((aiOutput.matchedSkills.length + 0.5 * aiOutput.partiallyMatchedSkills.length) / totalSkillsCount) * 100)
+        ? Math.round(((resolvedMatched.length + 0.5 * resolvedPartial.length) / totalSkillsCount) * 100)
         : finalScore;
 
       analysisResult = {
@@ -157,30 +208,15 @@ export class AgentOrchestrator {
           recommendedTimeline: aiOutput.recommendedTimeline,
         },
         skillsBreakdown: {
-          matched: aiOutput.matchedSkills.map((s) => ({
-            name: s.name,
-            category: s.category || 'General',
-            matchType: s.matchType || 'Exact Match',
-            context: s.context || 'Demonstrated in resume',
-          })),
-          partiallyMatched: aiOutput.partiallyMatchedSkills.map((s) => ({
-            name: s.name,
-            category: s.category || 'General',
-            matchType: s.matchType || 'Partial Match',
-            notes: s.notes || 'Found related foundational experience',
-          })),
-          missing: aiOutput.missingSkills.map((s) => ({
-            name: s.name,
-            category: s.category || 'General',
-            priority: s.priority,
-            importance: s.importance,
-          })),
+          matched: resolvedMatched,
+          partiallyMatched: resolvedPartial,
+          missing: resolvedMissing,
         },
         gapSummary: {
           totalRequiredSkills: totalSkillsCount,
-          matchedCount: aiOutput.matchedSkills.length,
-          partialCount: aiOutput.partiallyMatchedSkills.length,
-          missingCount: aiOutput.missingSkills.length,
+          matchedCount: resolvedMatched.length,
+          partialCount: resolvedPartial.length,
+          missingCount: resolvedMissing.length,
           coveragePercentage,
         },
         actionableSuggestions: {

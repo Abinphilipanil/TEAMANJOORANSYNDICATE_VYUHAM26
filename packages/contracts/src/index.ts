@@ -349,6 +349,9 @@ export interface Opportunity {
   prizeOrPerks?: string;
   verificationStatus: VerificationStatus;
   collectedAt: string;
+  aiRecommendation?: string;
+  matchScore?: number;
+  isLiveScraped?: boolean;
 }
 
 /**

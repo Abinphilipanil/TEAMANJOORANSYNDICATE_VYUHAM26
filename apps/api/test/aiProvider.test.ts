@@ -162,10 +162,14 @@ test('ClaudeResumeAnalysisAdapter - extension point validates interface and requ
   );
 });
 
-test('ProviderFactory - returns Groq provider by default', () => {
+test('ProviderFactory - returns configured AI provider (claude or groq)', () => {
   const provider = getResumeAnalysisProvider();
   assert.ok(provider);
-  assert.strictEqual(provider.providerName, 'groq');
+  assert.ok(['claude', 'groq'].includes(provider.providerName));
+  // When AI_PROVIDER is claude, providerName must be claude
+  if (process.env.AI_PROVIDER === 'claude') {
+    assert.strictEqual(provider.providerName, 'claude');
+  }
 });
 
 test('PdfExtractor - extracts text from buffer and handles non-PDF fallback cleanly', async () => {

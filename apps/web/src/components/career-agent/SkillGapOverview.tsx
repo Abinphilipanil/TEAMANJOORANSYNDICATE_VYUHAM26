@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
-  AlertTriangle, 
-  CheckCircle2, 
   Clock, 
   ArrowRight, 
-  TrendingUp, 
-  Layers 
+  Sparkles, 
+  Target
 } from 'lucide-react';
 import { SkillGapItem } from '../../data/sampleData';
 
@@ -22,50 +20,76 @@ export const SkillGapOverview: React.FC<SkillGapOverviewProps> = ({
 }) => {
   const [filterPriority, setFilterPriority] = useState<string>('All');
 
-  const filteredGaps =
-    filterPriority === 'All'
-      ? skillGaps
-      : skillGaps.filter((g) => g.priority.toLowerCase() === filterPriority.toLowerCase());
+  const counts = useMemo(() => {
+    const high = skillGaps.filter(
+      (g) => g.priority.toLowerCase() === 'critical' || g.priority.toLowerCase() === 'high'
+    ).length;
+    const medium = skillGaps.filter((g) => g.priority.toLowerCase() === 'medium').length;
+    return { all: skillGaps.length, high, medium };
+  }, [skillGaps]);
+
+  const filteredGaps = useMemo(() => {
+    if (filterPriority === 'High & Critical') {
+      return skillGaps.filter(
+        (g) => g.priority.toLowerCase() === 'critical' || g.priority.toLowerCase() === 'high'
+      );
+    }
+    if (filterPriority === 'Medium') {
+      return skillGaps.filter((g) => g.priority.toLowerCase() === 'medium');
+    }
+    return skillGaps;
+  }, [skillGaps, filterPriority]);
 
   return (
     <section className="ci-section-box" aria-labelledby="skill-gaps-heading">
       <div className="ci-section-header-row">
         <div className="ci-section-header-title-wrap">
-          <h2 id="skill-gaps-heading">Prioritized Skill Gap Analysis</h2>
+          <h2 id="skill-gaps-heading">Prioritized Skills to Learn ({filteredGaps.length})</h2>
           <p>
-            Identified competencies required to transition into{' '}
-            <strong className="text-slate-900">{targetRoleTitle}</strong>, ranked by market urgency.
+            Missing competencies required to transition into{' '}
+            <strong className="text-slate-900">{targetRoleTitle}</strong>, ranked by market priority with recommended actions and estimated time.
           </p>
         </div>
 
         {/* Priority Filter Tabs */}
         <div className="ci-filter-bar" role="toolbar" aria-label="Priority filters">
-          {['All', 'Critical', 'High', 'Medium'].map((priority) => (
-            <button
-              key={priority}
-              type="button"
-              className={`ci-filter-btn ${filterPriority.toLowerCase() === priority.toLowerCase() ? 'active' : ''}`}
-              onClick={() => setFilterPriority(priority)}
-            >
-              {priority} Priority
-            </button>
-          ))}
+          <button
+            type="button"
+            className={`ci-filter-btn ${filterPriority === 'All' ? 'active' : ''}`}
+            onClick={() => setFilterPriority('All')}
+          >
+            All Priorities ({counts.all})
+          </button>
+          <button
+            type="button"
+            className={`ci-filter-btn ${filterPriority === 'High & Critical' ? 'active' : ''}`}
+            onClick={() => setFilterPriority('High & Critical')}
+          >
+            High & Critical Priority ({counts.high})
+          </button>
+          <button
+            type="button"
+            className={`ci-filter-btn ${filterPriority === 'Medium' ? 'active' : ''}`}
+            onClick={() => setFilterPriority('Medium')}
+          >
+            Medium Priority ({counts.medium})
+          </button>
         </div>
       </div>
 
       <div className="ci-gaps-list">
         {filteredGaps.map((gap) => {
+          const pLower = gap.priority.toLowerCase();
           const priorityClass =
-            gap.priority.toLowerCase() === 'critical'
+            pLower === 'critical'
               ? 'priority-critical'
-              : gap.priority.toLowerCase() === 'high'
+              : pLower === 'high'
               ? 'priority-high'
               : 'priority-medium';
 
-          const gapSize = Math.max(0, gap.targetScore - gap.currentScore);
-
           return (
             <article key={gap.id} className="ci-gap-item-card">
+              {/* Card Header: Priority Pill, Skill Name, Category, and Estimated Time */}
               <div className="ci-gap-item-header">
                 <div className="ci-gap-title-group">
                   <span className={`ci-priority-pill ${priorityClass}`}>
@@ -75,46 +99,42 @@ export const SkillGapOverview: React.FC<SkillGapOverviewProps> = ({
                   <span className="ci-gap-category">{gap.category}</span>
                 </div>
 
-                <div className="ci-gap-time">
-                  <Clock className="w-3.5 h-3.5" />
+                {/* Estimated Time in Correct Top-Right Position */}
+                <div className="ci-gap-time" title="Estimated study time">
+                  <Clock className="w-4 h-4 text-blue-600 shrink-0" />
                   <span>Est. {gap.estimatedHours}</span>
                 </div>
               </div>
 
-              {/* Dual-Point Comparative Progress Bar */}
-              <div className="ci-gap-comparison-block">
-                <div className="ci-comparison-labels">
-                  <span className="ci-cur-label">
-                    Current: <strong>{gap.currentLevel}</strong> ({gap.currentScore}%)
+              {/* Recommended Action & Requirement Context (No Percentage Progress Bars) */}
+              <div className="ci-gap-details-card">
+                <div className="ci-gap-detail-row">
+                  <span className="ci-gap-detail-label">
+                    <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+                    Recommended Action:
                   </span>
-                  <span className="ci-gap-delta-pill">+{gapSize}% Gap to Close</span>
-                  <span className="ci-tar-label">
-                    Target: <strong>{gap.targetLevel}</strong> ({gap.targetScore}%)
-                  </span>
+                  <p className="ci-gap-detail-text">{gap.recommendedAction}</p>
                 </div>
 
-                <div className="ci-dual-meter-track" title={`Current: ${gap.currentScore}%, Target Benchmark: ${gap.targetScore}%`}>
-                  <div
-                    className="ci-dual-meter-target"
-                    style={{ width: `${gap.targetScore}%` }}
-                  />
-                  <div
-                    className="ci-dual-meter-current"
-                    style={{ width: `${gap.currentScore}%` }}
-                  />
-                </div>
-              </div>
-
-              {/* Recommended Action Callout */}
-              <div className="ci-gap-action-box">
-                <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-blue-600 mt-0.5" />
-                <div>
-                  <strong>Recommended Action:</strong> {gap.recommendedAction}
-                </div>
+                {gap.importanceReason && gap.importanceReason !== gap.recommendedAction && (
+                  <div className="ci-gap-detail-row ci-gap-reason-row">
+                    <span className="ci-gap-detail-label">
+                      <Target className="w-4 h-4 text-slate-500 shrink-0" />
+                      Role Requirement:
+                    </span>
+                    <p className="ci-gap-detail-text text-slate-600">{gap.importanceReason}</p>
+                  </div>
+                )}
               </div>
             </article>
           );
         })}
+
+        {filteredGaps.length === 0 && (
+          <div className="text-center py-8 text-slate-500 text-sm">
+            No skill gaps found for the selected priority filter.
+          </div>
+        )}
       </div>
 
       {onNavigateToRoadmap && (

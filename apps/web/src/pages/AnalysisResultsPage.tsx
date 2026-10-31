@@ -97,9 +97,9 @@ export const AnalysisResultsPage: React.FC = () => {
           <button
             type="button"
             className="btn-secondary-action"
-            onClick={() => navigate('/job-matching')}
+            onClick={() => navigate('/skill-gaps')}
           >
-            <IconTarget className="w-4 h-4 inline-icon" /> Job Matching
+            <IconTarget className="w-4 h-4 inline-icon" /> View Skill Gaps
           </button>
           <button
             type="button"

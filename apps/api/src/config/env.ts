@@ -28,5 +28,5 @@ export const ENV = {
   // Alternative models: llama-3.1-8b-instant, mixtral-8x7b-32768
   GROQ_MODEL: process.env.GROQ_MODEL || 'openai/gpt-oss-120b',
   ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || '',
-  CLAUDE_MODEL: process.env.CLAUDE_MODEL || 'claude-3-5-sonnet-20241022',
+  CLAUDE_MODEL: process.env.CLAUDE_MODEL || 'claude-sonnet-5',
 };

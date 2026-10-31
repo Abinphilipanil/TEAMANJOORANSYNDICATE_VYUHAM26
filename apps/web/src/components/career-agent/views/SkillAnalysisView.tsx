@@ -3,10 +3,8 @@ import {
   Layers, 
   CheckCircle2, 
   AlertTriangle, 
-  TrendingUp, 
   Award, 
   Target, 
-  Sparkles, 
   ShieldCheck 
 } from 'lucide-react';
 import SkillGapOverview from '../SkillGapOverview';
@@ -23,6 +21,7 @@ interface SkillAnalysisViewProps {
   currentSkills: CurrentSkillItem[];
   skillGaps: SkillGapItem[];
   targetRoleTitle?: string;
+  alignmentScore?: number;
   onNavigateToRoadmap?: () => void;
 }
 
@@ -30,6 +29,7 @@ export const SkillAnalysisView: React.FC<SkillAnalysisViewProps> = ({
   currentSkills,
   skillGaps,
   targetRoleTitle = 'Cloud Solutions Architect',
+  alignmentScore,
   onNavigateToRoadmap,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState('ALL');
@@ -39,17 +39,21 @@ export const SkillAnalysisView: React.FC<SkillAnalysisViewProps> = ({
   // Calculate reliable dynamic metrics from actual datasets
   const metrics = useMemo(() => {
     const total = currentSkills.length;
-    const strong = currentSkills.filter((s) => s.score >= 80).length;
     const gapsCount = skillGaps.length;
+    const highGapsCount = skillGaps.filter(
+      (g) => g.priority.toLowerCase() === 'critical' || g.priority.toLowerCase() === 'high'
+    ).length;
+    const mediumGapsCount = skillGaps.filter((g) => g.priority.toLowerCase() === 'medium').length;
     const avgScore = total > 0 ? Math.round(currentSkills.reduce((acc, s) => acc + s.score, 0) / total) : 75;
 
     return {
       total,
-      strong,
       gapsCount,
-      alignment: avgScore,
+      highGapsCount,
+      mediumGapsCount,
+      alignment: alignmentScore !== undefined ? alignmentScore : avgScore,
     };
-  }, [currentSkills, skillGaps]);
+  }, [currentSkills, skillGaps, alignmentScore]);
 
   const filteredCurrentSkills = useMemo(() => {
     if (selectedCategory === 'ALL') return currentSkills;
@@ -83,29 +87,29 @@ export const SkillAnalysisView: React.FC<SkillAnalysisViewProps> = ({
             </div>
           </div>
           <span className="ci-summary-value">{metrics.total}</span>
-          <span className="ci-summary-subtext">Across {categories.length - 1} technical domains</span>
+          <span className="ci-summary-subtext">Verified from your resume</span>
         </div>
 
         <div className="ci-summary-card">
           <div className="ci-summary-header">
-            <span className="ci-summary-label">Strong Competencies</span>
-            <div className="ci-summary-icon icon-emerald">
-              <Award className="w-4 h-4" />
-            </div>
-          </div>
-          <span className="ci-summary-value text-emerald-600">{metrics.strong}</span>
-          <span className="ci-summary-subtext">Advanced (≥80% proficiency)</span>
-        </div>
-
-        <div className="ci-summary-card">
-          <div className="ci-summary-header">
-            <span className="ci-summary-label">Skills to Improve</span>
-            <div className="ci-summary-icon icon-amber">
+            <span className="ci-summary-label">High Priority Gaps</span>
+            <div className="ci-summary-icon icon-rose">
               <AlertTriangle className="w-4 h-4" />
             </div>
           </div>
-          <span className="ci-summary-value text-amber-600">{metrics.gapsCount}</span>
-          <span className="ci-summary-subtext">Ranked by market urgency</span>
+          <span className="ci-summary-value text-rose-600">{metrics.highGapsCount}</span>
+          <span className="ci-summary-subtext">Critical & high urgency</span>
+        </div>
+
+        <div className="ci-summary-card">
+          <div className="ci-summary-header">
+            <span className="ci-summary-label">Medium Priority Gaps</span>
+            <div className="ci-summary-icon icon-amber">
+              <Award className="w-4 h-4" />
+            </div>
+          </div>
+          <span className="ci-summary-value text-amber-600">{metrics.mediumGapsCount}</span>
+          <span className="ci-summary-subtext">Secondary competencies</span>
         </div>
 
         <div className="ci-summary-card">
@@ -120,12 +124,12 @@ export const SkillAnalysisView: React.FC<SkillAnalysisViewProps> = ({
         </div>
       </section>
 
-      {/* 3. Verified Current Skills Section */}
+      {/* 3. Verified Current Skills Section (No Progress Bar / Percentage) */}
       <section className="ci-section-box" aria-labelledby="verified-skills-heading">
         <div className="ci-section-header-row">
           <div className="ci-section-header-title-wrap">
             <h2 id="verified-skills-heading">Verified Current Skills ({filteredCurrentSkills.length})</h2>
-            <p>Self-assessed, project-evaluated, and verified engineering competencies.</p>
+            <p>Demonstrated engineering competencies and technologies extracted from your resume.</p>
           </div>
 
           <div className="ci-filter-bar" role="tablist" aria-label="Skill categories">
@@ -144,54 +148,25 @@ export const SkillAnalysisView: React.FC<SkillAnalysisViewProps> = ({
           </div>
         </div>
 
+        {/* Clean Tech Cards Grid - Tech Name in Box Without Progress Bars */}
         <div className="ci-skills-cards-grid">
-          {filteredCurrentSkills.map((item) => {
-            const levelClass =
-              item.level.toLowerCase() === 'advanced'
-                ? 'level-advanced'
-                : item.level.toLowerCase() === 'intermediate'
-                ? 'level-intermediate'
-                : 'level-beginner';
+          {filteredCurrentSkills.map((item) => (
+            <article key={item.name} className="ci-skill-card ci-verified-tech-card">
+              <div className="ci-skill-card-top">
+                <span className="ci-skill-category-tag">{item.category}</span>
+                <span className="ci-skill-verified-pill">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 inline" />
+                  Verified
+                </span>
+              </div>
 
-            const fillClass =
-              item.score >= 80 ? 'fill-emerald' : item.score >= 60 ? 'fill-blue' : 'fill-amber';
-
-            return (
-              <article key={item.name} className="ci-skill-card">
-                <div className="ci-skill-card-top">
-                  <span className="ci-skill-category-tag">{item.category}</span>
-                  <span className={`ci-skill-level-badge ${levelClass}`}>
-                    {item.level}
-                  </span>
-                </div>
-
-                <h3 className="ci-skill-card-name">{item.name}</h3>
-
-                <div className="ci-skill-meter-wrap">
-                  <div className="ci-meter-info">
-                    <span>Proficiency</span>
-                    <strong>{item.score}%</strong>
-                  </div>
-                  <div className="ci-progress-bar">
-                    <div className="ci-progress-track">
-                      <div
-                        className={`ci-progress-fill ${fillClass}`}
-                        style={{ width: `${item.score}%` }}
-                        role="progressbar"
-                        aria-valuenow={item.score}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
+              <h3 className="ci-skill-card-name">{item.name}</h3>
+            </article>
+          ))}
         </div>
       </section>
 
-      {/* 4. Target-Role Gap Analysis Component */}
+      {/* 4. Target-Role Gap Analysis Component (High & Medium Priority Skills) */}
       <SkillGapOverview 
         skillGaps={skillGaps} 
         targetRoleTitle={targetRoleTitle} 

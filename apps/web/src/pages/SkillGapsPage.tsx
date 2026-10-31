@@ -107,6 +107,7 @@ export const SkillGapsPage: React.FC = () => {
         currentSkills={activeCurrentSkills}
         skillGaps={activeSkillGaps}
         targetRoleTitle={targetRoleTitle}
+        alignmentScore={resumeAnalysisResult?.overallMatch?.score}
         onNavigateToRoadmap={() => navigate('/learning-roadmap')}
       />
     </div>

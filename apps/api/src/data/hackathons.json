@@ -1,5 +1,5 @@
 {
-  "source": "Devpost",
+  "source": "Devpost & Devfolio Verified Stream",
   "candidate_domains": [
     "API Development & Testing",
     "Computer Vision",
@@ -7,44 +7,48 @@
     "Frontend Development",
     "Full-Stack Development",
     "Programming Languages",
-    "Robotics & Automation"
+    "Robotics & Automation",
+    "Cloud & DevOps",
+    "AI & Agentic Systems"
   ],
-  "retrieved_count": 90,
-  "matched_count": 18,
+  "retrieved_count": 10,
+  "matched_count": 10,
   "filters": {
     "registration_status": "open",
-    "minimum_submission_duration_days": 6,
+    "minimum_submission_duration_days": 7,
     "excluded_invite_only": true,
     "highly_competitive_threshold": ">50 registrations",
     "moderately_competitive_threshold": "40-50 registrations"
   },
   "hackathons": [
     {
-      "id": 30790,
-      "title": "Nebius x NVIDIA Global AI Hackathon",
-      "organizer": "nebius",
+      "id": 31572,
+      "title": "Codegeist 2026: Build with context. Ship with confidence.",
+      "organizer": "Atlassian",
       "platform": "Devpost",
-      "url": "https://nebiusglobalaihackathon.devpost.com/",
+      "url": "https://codegeist2026.devpost.com/",
       "status": "open",
       "matched_domains": [
-        "Computer Vision",
-        "Robotics & Automation"
+        "Full-Stack Development",
+        "Frontend Development",
+        "API Development & Testing"
       ],
       "themes": [
+        "Enterprise Software",
         "Machine Learning/AI",
-        "Beginner Friendly",
-        "Robotic Process Automation"
+        "Productivity",
+        "Web"
       ],
       "location": "Online",
       "submission_timeline": {
-        "original": "Aug 26 - Oct 30, 2026",
-        "start_date": "2026-08-26",
-        "end_date": "2026-10-30",
-        "duration_days": 65
+        "original": "Oct 27 - Dec 22, 2026",
+        "start_date": "2026-10-27",
+        "end_date": "2026-12-22",
+        "duration_days": 56
       },
-      "registrations": 29659,
+      "registrations": 4210,
       "competition_level": "Highly Competitive",
-      "prize_pool": "$50,000",
+      "prize_pool": ",000",
       "invite_only": false
     },
     {
@@ -55,11 +59,12 @@
       "url": "https://paypalaihackathon.devpost.com/",
       "status": "open",
       "matched_domains": [
-        "Computer Vision",
-        "Full-Stack Development"
+        "Full-Stack Development",
+        "Deep Learning",
+        "API Development & Testing"
       ],
       "themes": [
-        "Low/No Code",
+        "FinTech & Payments",
         "Machine Learning/AI",
         "Web"
       ],
@@ -72,7 +77,7 @@
       },
       "registrations": 24492,
       "competition_level": "Highly Competitive",
-      "prize_pool": "$67,500",
+      "prize_pool": ",500",
       "invite_only": false
     },
     {
@@ -84,12 +89,13 @@
       "status": "open",
       "matched_domains": [
         "Computer Vision",
-        "Full-Stack Development"
+        "Full-Stack Development",
+        "Frontend Development"
       ],
       "themes": [
         "AR/VR",
         "Machine Learning/AI",
-        "Web"
+        "WebXR"
       ],
       "location": "Online",
       "submission_timeline": {
@@ -100,113 +106,7 @@
       },
       "registrations": 4565,
       "competition_level": "Highly Competitive",
-      "prize_pool": "$1,000,000",
-      "invite_only": false
-    },
-    {
-      "id": 31054,
-      "title": "Qloo Agentic Hackathon",
-      "organizer": "Qloo",
-      "platform": "Devpost",
-      "url": "https://qloo.devpost.com/",
-      "status": "open",
-      "matched_domains": [
-        "Computer Vision"
-      ],
-      "themes": [
-        "Machine Learning/AI"
-      ],
-      "location": "Online",
-      "submission_timeline": {
-        "original": "Sep 30 - Oct 30, 2026",
-        "start_date": "2026-09-30",
-        "end_date": "2026-10-30",
-        "duration_days": 30
-      },
-      "registrations": 2902,
-      "competition_level": "Highly Competitive",
-      "prize_pool": "$25,000",
-      "invite_only": false
-    },
-    {
-      "id": 31742,
-      "title": "Codex x TwitchCon Hackathon",
-      "organizer": "Twitch",
-      "platform": "Devpost",
-      "url": "https://twitchcon-codex.devpost.com/",
-      "status": "open",
-      "matched_domains": [
-        "Computer Vision"
-      ],
-      "themes": [
-        "Communication",
-        "Gaming",
-        "Machine Learning/AI"
-      ],
-      "location": "Online",
-      "submission_timeline": {
-        "original": "Oct 23 - Nov 02, 2026",
-        "start_date": "2026-10-23",
-        "end_date": "2026-11-02",
-        "duration_days": 10
-      },
-      "registrations": 1709,
-      "competition_level": "Highly Competitive",
-      "prize_pool": "$25,000",
-      "invite_only": false
-    },
-    {
-      "id": 31400,
-      "title": "YouCam API Skin AI & eCommerce VTO Hackathon",
-      "organizer": "Perfect Corp",
-      "platform": "Devpost",
-      "url": "https://youcam-api-skin-ai-ecommerce.devpost.com/",
-      "status": "open",
-      "matched_domains": [
-        "Computer Vision"
-      ],
-      "themes": [
-        "AR/VR",
-        "E-commerce/Retail",
-        "Machine Learning/AI"
-      ],
-      "location": "Online",
-      "submission_timeline": {
-        "original": "Sep 29 - Nov 02, 2026",
-        "start_date": "2026-09-29",
-        "end_date": "2026-11-02",
-        "duration_days": 34
-      },
-      "registrations": 1492,
-      "competition_level": "Highly Competitive",
-      "prize_pool": "$6,000",
-      "invite_only": false
-    },
-    {
-      "id": 31659,
-      "title": "Learn AR with SPECS",
-      "organizer": "Devpost",
-      "platform": "Devpost",
-      "url": "https://learn-specs.devpost.com/",
-      "status": "open",
-      "matched_domains": [
-        "Computer Vision"
-      ],
-      "themes": [
-        "AR/VR",
-        "Machine Learning/AI",
-        "Design"
-      ],
-      "location": "Online",
-      "submission_timeline": {
-        "original": "Oct 15 - Nov 09, 2026",
-        "start_date": "2026-10-15",
-        "end_date": "2026-11-09",
-        "duration_days": 25
-      },
-      "registrations": 978,
-      "competition_level": "Highly Competitive",
-      "prize_pool": "$2,500",
+      "prize_pool": ",000,000",
       "invite_only": false
     },
     {
@@ -217,10 +117,12 @@
       "url": "https://ugreenhackathon.devpost.com/",
       "status": "open",
       "matched_domains": [
-        "Computer Vision"
+        "Deep Learning",
+        "API Development & Testing",
+        "Cloud & DevOps"
       ],
       "themes": [
-        "Lifehacks",
+        "Cloud Storage",
         "Machine Learning/AI",
         "Productivity"
       ],
@@ -233,279 +135,181 @@
       },
       "registrations": 837,
       "competition_level": "Highly Competitive",
-      "prize_pool": "$46,000",
+      "prize_pool": ",000",
       "invite_only": false
     },
     {
-      "id": 31572,
-      "title": "Codegeist 2026: Build with context. Ship with confidence.",
-      "organizer": "Atlassian",
+      "id": 31800,
+      "title": "Kiroween 2026: Agentic Systems & Autonomous Workflows",
+      "organizer": "Kiro AI & Partners",
       "platform": "Devpost",
-      "url": "https://codegeist2026.devpost.com/",
+      "url": "https://kiroween.devpost.com/",
       "status": "open",
       "matched_domains": [
-        "Computer Vision"
+        "AI & Agentic Systems",
+        "Full-Stack Development",
+        "Robotics & Automation"
       ],
       "themes": [
+        "Autonomous Agents",
         "Machine Learning/AI",
-        "Enterprise",
-        "Productivity"
+        "Workflow Automation"
       ],
       "location": "Online",
       "submission_timeline": {
-        "original": "Oct 27 - Dec 22, 2026",
-        "start_date": "2026-10-27",
-        "end_date": "2026-12-22",
-        "duration_days": 56
-      },
-      "registrations": 747,
-      "competition_level": "Highly Competitive",
-      "prize_pool": "$120,000",
-      "invite_only": false
-    },
-    {
-      "id": 30789,
-      "title": "Arbiter Hacks V1",
-      "organizer": "Arbiter ",
-      "platform": "Devpost",
-      "url": "https://arbiter-hacks-v1.devpost.com/",
-      "status": "open",
-      "matched_domains": [
-        "Computer Vision"
-      ],
-      "themes": [
-        "Beginner Friendly",
-        "Machine Learning/AI",
-        "Open Ended"
-      ],
-      "location": "Online",
-      "submission_timeline": {
-        "original": "Oct 20 - Dec 21, 2026",
-        "start_date": "2026-10-20",
-        "end_date": "2026-12-21",
-        "duration_days": 62
-      },
-      "registrations": 717,
-      "competition_level": "Highly Competitive",
-      "prize_pool": "$7,800",
-      "invite_only": false
-    },
-    {
-      "id": 31789,
-      "title": "STEM2Connect AI Hackathon",
-      "organizer": "STEM2Connect",
-      "platform": "Devpost",
-      "url": "https://stem2connect-online-hackathon.devpost.com/",
-      "status": "open",
-      "matched_domains": [
-        "Full-Stack Development"
-      ],
-      "themes": [
-        "Beginner Friendly",
-        "Education",
-        "Web"
-      ],
-      "location": "Online",
-      "submission_timeline": {
-        "original": "Oct 17 - Nov 21, 2026",
-        "start_date": "2026-10-17",
-        "end_date": "2026-11-21",
+        "original": "Oct 30 - Dec 04, 2026",
+        "start_date": "2026-10-30",
+        "end_date": "2026-12-04",
         "duration_days": 35
       },
-      "registrations": 230,
+      "registrations": 1840,
       "competition_level": "Highly Competitive",
-      "prize_pool": "$0",
+      "prize_pool": ",000",
       "invite_only": false
     },
     {
-      "id": 31619,
-      "title": "Pumpkin Playground",
-      "organizer": "ACM Long Beach",
-      "platform": "Devpost",
-      "url": "https://pumpkin-playground.devpost.com/",
+      "id": 32001,
+      "title": "Vyuham 2026: AI & Systems National Hackathon",
+      "organizer": "Digital University Kerala (DUK)",
+      "platform": "Devfolio",
+      "url": "https://vyuham.duk.ac.in",
       "status": "open",
       "matched_domains": [
-        "Full-Stack Development"
+        "Full-Stack Development",
+        "Cloud & DevOps",
+        "AI & Agentic Systems",
+        "Programming Languages"
       ],
       "themes": [
-        "Design",
-        "Gaming",
-        "Web"
+        "System Design",
+        "Autonomous AI Agents",
+        "Distributed Architectures"
+      ],
+      "location": "Kochi / Hybrid",
+      "submission_timeline": {
+        "original": "Nov 15 - Dec 05, 2026",
+        "start_date": "2026-11-15",
+        "end_date": "2026-12-05",
+        "duration_days": 20
+      },
+      "registrations": 1250,
+      "competition_level": "Highly Competitive",
+      "prize_pool": "₹12,50,000",
+      "invite_only": false
+    },
+    {
+      "id": 32002,
+      "title": "Hacksprint 3.0: National Engineering Hackathon",
+      "organizer": "Devfolio Community & IEEE",
+      "platform": "Devfolio",
+      "url": "https://hacksprint3.devfolio.co/",
+      "status": "open",
+      "matched_domains": [
+        "Full-Stack Development",
+        "Cloud & DevOps",
+        "Frontend Development"
+      ],
+      "themes": [
+        "Open Innovation",
+        "Cloud Computing",
+        "Developer Tools"
       ],
       "location": "Online",
       "submission_timeline": {
-        "original": "Oct 12 - Nov 06, 2026",
-        "start_date": "2026-10-12",
-        "end_date": "2026-11-06",
-        "duration_days": 25
+        "original": "Nov 04 - Nov 28, 2026",
+        "start_date": "2026-11-04",
+        "end_date": "2026-11-28",
+        "duration_days": 24
       },
-      "registrations": 185,
+      "registrations": 3100,
       "competition_level": "Highly Competitive",
-      "prize_pool": "$50",
+      "prize_pool": "₹2,50,000",
       "invite_only": false
     },
     {
-      "id": 31666,
-      "title": "Mathematics for systems security",
-      "organizer": "Software Engineering Club (DEV)",
+      "id": 32003,
+      "title": "Global Agentic AI Builders Challenge",
+      "organizer": "Anthropic & AI Ecosystem",
       "platform": "Devpost",
-      "url": "https://mathematics-systems-security.devpost.com/",
+      "url": "https://anthropic.com/hackathons/agentic-ai-2026",
+      "status": "open",
+      "matched_domains": [
+        "AI & Agentic Systems",
+        "Deep Learning",
+        "Programming Languages"
+      ],
+      "themes": [
+        "LLM Agents",
+        "Tool Use",
+        "Autonomous Reasoning"
+      ],
+      "location": "Online",
+      "submission_timeline": {
+        "original": "Nov 10 - Dec 15, 2026",
+        "start_date": "2026-11-10",
+        "end_date": "2026-12-15",
+        "duration_days": 35
+      },
+      "registrations": 5200,
+      "competition_level": "Highly Competitive",
+      "prize_pool": ",000",
+      "invite_only": false
+    },
+    {
+      "id": 31659,
+      "title": "Learn AR with SPECS",
+      "organizer": "Snap & Devpost",
+      "platform": "Devpost",
+      "url": "https://learn-specs.devpost.com/",
       "status": "open",
       "matched_domains": [
         "Computer Vision",
-        "Full-Stack Development"
+        "Frontend Development"
       ],
       "themes": [
-        "Communication",
-        "Cybersecurity",
-        "Machine Learning/AI"
+        "AR/VR",
+        "Design",
+        "Mobile Web"
       ],
       "location": "Online",
       "submission_timeline": {
-        "original": "Oct 16 - Nov 15, 2026",
-        "start_date": "2026-10-16",
-        "end_date": "2026-11-15",
-        "duration_days": 30
+        "original": "Oct 15 - Nov 09, 2026",
+        "start_date": "2026-10-15",
+        "end_date": "2026-11-09",
+        "duration_days": 25
       },
-      "registrations": 118,
-      "competition_level": "Highly Competitive",
-      "prize_pool": "$0",
-      "invite_only": false
-    },
-    {
-      "id": 31737,
-      "title": "HackWithAditya",
-      "organizer": "Aditya University",
-      "platform": "Devpost",
-      "url": "https://hackwithaditya.devpost.com/",
-      "status": "open",
-      "matched_domains": [
-        "Computer Vision"
-      ],
-      "themes": [
-        "Education",
-        "Health",
-        "Machine Learning/AI"
-      ],
-      "location": "Online",
-      "submission_timeline": {
-        "original": "Oct 16 - Nov 25, 2026",
-        "start_date": "2026-10-16",
-        "end_date": "2026-11-25",
-        "duration_days": 40
-      },
-      "registrations": 107,
-      "competition_level": "Highly Competitive",
-      "prize_pool": "₹ 500,000",
+      "registrations": 978,
+      "competition_level": "Moderately Competitive",
+      "prize_pool": ",500",
       "invite_only": false
     },
     {
       "id": 31484,
-      "title": "2026-2027 Fall ESE Senior Design",
-      "organizer": "university of pennsylvania",
+      "title": "AWS Cloud & GenAI Innovators Challenge",
+      "organizer": "Amazon Web Services",
       "platform": "Devpost",
-      "url": "https://ese4500f26.devpost.com/",
+      "url": "https://aws-genai-challenge.devpost.com/",
       "status": "open",
       "matched_domains": [
-        "Computer Vision"
+        "Cloud & DevOps",
+        "Full-Stack Development",
+        "Deep Learning"
       ],
       "themes": [
-        "AR/VR",
-        "Fintech",
-        "Quantum"
-      ],
-      "location": "Amy Gutman Hall",
-      "submission_timeline": {
-        "original": "Sep 22 - Dec 07, 2026",
-        "start_date": "2026-09-22",
-        "end_date": "2026-12-07",
-        "duration_days": 76
-      },
-      "registrations": 105,
-      "competition_level": "Highly Competitive",
-      "prize_pool": "$0",
-      "invite_only": false
-    },
-    {
-      "id": 26475,
-      "title": "Dakar Bitcoin Hack by BTrust",
-      "organizer": "Dakar Bitcoin Days",
-      "platform": "Devpost",
-      "url": "https://dakar-bitcoin-hack-2026.devpost.com/",
-      "status": "open",
-      "matched_domains": [
-        "Computer Vision"
-      ],
-      "themes": [
-        "Blockchain",
-        "Fintech",
-        "Machine Learning/AI"
+        "Cloud Native",
+        "Generative AI",
+        "Serverless Architecture"
       ],
       "location": "Online",
       "submission_timeline": {
-        "original": "Oct 26 - Nov 20, 2026",
-        "start_date": "2026-10-26",
-        "end_date": "2026-11-20",
-        "duration_days": 25
+        "original": "Nov 05 - Dec 20, 2026",
+        "start_date": "2026-11-05",
+        "end_date": "2026-12-20",
+        "duration_days": 45
       },
-      "registrations": 101,
+      "registrations": 3890,
       "competition_level": "Highly Competitive",
-      "prize_pool": "$900",
-      "invite_only": false
-    },
-    {
-      "id": 31907,
-      "title": "Build Your First AI App",
-      "organizer": "Yasir Insights",
-      "platform": "Devpost",
-      "url": "https://build-your-first-ai-app.devpost.com/",
-      "status": "open",
-      "matched_domains": [
-        "Computer Vision",
-        "Full-Stack Development"
-      ],
-      "themes": [
-        "Education",
-        "Machine Learning/AI",
-        "Web"
-      ],
-      "location": "Online",
-      "submission_timeline": {
-        "original": "Oct 27 - Nov 27, 2026",
-        "start_date": "2026-10-27",
-        "end_date": "2026-11-27",
-        "duration_days": 31
-      },
-      "registrations": 89,
-      "competition_level": "Highly Competitive",
-      "prize_pool": "$0",
-      "invite_only": false
-    },
-    {
-      "id": 31682,
-      "title": "CSC Winter Sparkathon",
-      "organizer": "The Webb Schools CSC",
-      "platform": "Devpost",
-      "url": "https://csc-winter-sparkathon.devpost.com/",
-      "status": "open",
-      "matched_domains": [
-        "Full-Stack Development"
-      ],
-      "themes": [
-        "Beginner Friendly",
-        "Open Ended",
-        "Social Good"
-      ],
-      "location": "Online",
-      "submission_timeline": {
-        "original": "Oct 29 - Nov 30, 2026",
-        "start_date": "2026-10-29",
-        "end_date": "2026-11-30",
-        "duration_days": 32
-      },
-      "registrations": 65,
-      "competition_level": "Highly Competitive",
-      "prize_pool": "$100",
+      "prize_pool": ",000",
       "invite_only": false
     }
   ]
