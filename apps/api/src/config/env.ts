@@ -26,7 +26,7 @@ export const ENV = {
   GROQ_API_KEY: process.env.GROQ_API_KEY || '',
   // Currently supported Groq model suitable for high-quality structured JSON output
   // Alternative models: llama-3.1-8b-instant, mixtral-8x7b-32768
-  GROQ_MODEL: process.env.GROQ_MODEL || 'openai/gpt-oss-120b',
+  GROQ_MODEL: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
   ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || '',
   CLAUDE_MODEL: process.env.CLAUDE_MODEL || 'claude-sonnet-5',
 };

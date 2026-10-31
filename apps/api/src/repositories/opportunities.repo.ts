@@ -15,6 +15,38 @@ const aiMatchCache = new Map<string, { timestamp: number; data: Array<{ id: stri
 // In-memory cache for Groq AI discovered conferences (TTL: 30 minutes)
 const conferenceAiCache = new Map<string, { timestamp: number; data: Opportunity[] }>();
 
+function extractJson<T = any>(raw: string, fallback: T): T {
+  if (!raw) return fallback;
+  let str = raw.trim();
+  const firstBrace = str.indexOf('{');
+  const firstBracket = str.indexOf('[');
+  let start = -1;
+  let isObject = true;
+  if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+    start = firstBrace;
+    isObject = true;
+  } else if (firstBracket !== -1) {
+    start = firstBracket;
+    isObject = false;
+  }
+  if (start === -1) return fallback;
+  const endChar = isObject ? '}' : ']';
+  const end = str.lastIndexOf(endChar);
+  if (end === -1 || end <= start) return fallback;
+
+  let candidate = str.substring(start, end + 1).trim();
+  try {
+    return JSON.parse(candidate);
+  } catch {
+    candidate = candidate.replace(/,\s*([}\]])/g, '$1');
+    try {
+      return JSON.parse(candidate);
+    } catch {
+      return fallback;
+    }
+  }
+}
+
 function cleanPrize(rawPrize?: string): string {
   if (!rawPrize) return 'Prize pool available';
   const cleaned = String(rawPrize).replace(/<[^>]*>/g, '').trim();
@@ -442,7 +474,7 @@ Return strict JSON format with root key "matches":
 
         const response = await anthropic.messages.create({
           model,
-          max_tokens: 3000,
+          max_tokens: 4096,
           system: systemPrompt,
           messages: [{
             role: 'user',
@@ -452,11 +484,7 @@ Return strict JSON format with root key "matches":
 
         const textBlock = response.content.find((b) => b.type === 'text');
         const rawText = textBlock && 'text' in textBlock ? textBlock.text : '{}';
-        let jsonStr = rawText.trim();
-        if (jsonStr.startsWith('```json')) jsonStr = jsonStr.replace(/^```json\s*/, '').replace(/\s*```$/, '');
-        else if (jsonStr.startsWith('```')) jsonStr = jsonStr.replace(/^```\s*/, '').replace(/\s*```$/, '');
-
-        const parsed = JSON.parse(jsonStr);
+        const parsed = extractJson(rawText, { matches: [] });
         const matches: Array<{ id: string; matchedSkills: string[]; aiSuggestion: string; matchScore: number }> =
           Array.isArray(parsed.matches) ? parsed.matches : [];
 
@@ -485,7 +513,7 @@ Return strict JSON format with root key "matches":
     if (groqKey && groqKey.trim().length > 0 && !groqKey.includes('your_groq_api_key')) {
       try {
         const groq = new Groq({ apiKey: groqKey.trim(), timeout: 20000 });
-        const model = process.env.GROQ_MODEL || ENV.GROQ_MODEL || 'openai/gpt-oss-120b';
+        const model = process.env.GROQ_MODEL || ENV.GROQ_MODEL || 'llama-3.3-70b-versatile';
 
         const completion = await groq.chat.completions.create({
           model,
@@ -497,7 +525,7 @@ Return strict JSON format with root key "matches":
           temperature: 0.3,
         });
 
-        const parsed = JSON.parse(completion.choices[0]?.message?.content || '{}');
+        const parsed = extractJson(completion.choices[0]?.message?.content || '{}', { matches: [] });
         const matches: Array<{ id: string; matchedSkills: string[]; aiSuggestion: string; matchScore: number }> =
           Array.isArray(parsed.matches) ? parsed.matches : [];
 
@@ -563,22 +591,18 @@ Return strict JSON format with root key "matches":
       return cached.data;
     }
 
+    const registryMap = new Map(VERIFIED_CONFERENCES_REGISTRY.map((c) => [c.id, c]));
     const registryBrief = VERIFIED_CONFERENCES_REGISTRY.map((c) => ({
       id: c.id,
       title: c.title,
       organization: c.organization,
-      summary: c.summary,
       targetRoles: c.targetRoles,
       relevantSkills: c.relevantSkills,
       location: c.location,
-      startDate: c.startDate,
-      deadlineDate: c.deadlineDate,
-      url: c.url,
-      prizeOrPerks: c.prizeOrPerks,
     }));
 
     const prompt = `You are an expert AI Career and Tech Conference Scout powered by Claude Sonnet 5.
-Analyze the candidate's verified profile against this GROUNDED REGISTRY of real, verified premier upcoming 2026-2027 tech conferences:
+Analyze the candidate's verified profile against this GROUNDED REGISTRY of premier 2026-2027 tech conferences:
 ${JSON.stringify(registryBrief, null, 2)}
 
 Candidate Target Role: "${targetRole}"
@@ -586,28 +610,16 @@ Candidate Verified Resume Skills: ${cleanSkills.length > 0 ? cleanSkills.join(',
 Target Region: ${location && location !== 'All' ? location : 'India, Global Virtual, or International'}
 
 INSTRUCTIONS:
-1. Select the 6 to 8 most impactful conferences from the registry that best advance the candidate toward their target role.
-2. Formulate a personalized "aiRecommendation" explaining exactly which breakout tracks, workshops, or keynotes align with their specific skills (${cleanSkills.slice(0, 3).join(', ')}).
+1. Select 6 to 8 most impactful conferences from the registry for this candidate.
+2. Formulate a personalized "aiRecommendation" explaining which tracks or workshops align with their skills (${cleanSkills.slice(0, 3).join(', ')}).
 3. Assign a "matchScore" between 78 and 96 reflecting skill synergy.
-4. Preserve the exact official "url", "title", "organization", "startDate", "deadlineDate", and "prizeOrPerks" from the registry. DO NOT hallucinate fake domains or altered dates.
 
 Output strictly valid JSON with root key "conferences":
 {
   "conferences": [
     {
       "id": "<registry id>",
-      "title": "<registry title>",
-      "type": "conference",
-      "organization": "<registry organization>",
-      "summary": "<registry summary>",
-      "targetRoles": ["${targetRole}", "Full-Stack Developer"],
       "relevantSkills": [<3-5 skills relevant to candidate and conference>],
-      "location": "<registry location>",
-      "isRemote": true,
-      "startDate": "<registry startDate>",
-      "deadlineDate": "<registry deadlineDate>",
-      "url": "<registry url>",
-      "prizeOrPerks": "<registry prizeOrPerks>",
       "aiRecommendation": "<actionable personalization based on candidate skills>",
       "matchScore": 92
     }
@@ -622,42 +634,29 @@ Output strictly valid JSON with root key "conferences":
 
         const response = await anthropic.messages.create({
           model,
-          max_tokens: 3500,
+          max_tokens: 4096,
           system: 'You are an elite developer career advocate and conference intelligence system. Output strictly valid JSON.',
           messages: [{ role: 'user', content: prompt }],
         });
 
         const textBlock = response.content.find((b) => b.type === 'text');
         const rawText = textBlock && 'text' in textBlock ? textBlock.text : '{}';
-        let jsonStr = rawText.trim();
-        if (jsonStr.startsWith('```json')) jsonStr = jsonStr.replace(/^```json\s*/, '').replace(/\s*```$/, '');
-        else if (jsonStr.startsWith('```')) jsonStr = jsonStr.replace(/^```\s*/, '').replace(/\s*```$/, '');
-
-        const parsed = JSON.parse(jsonStr);
+        const parsed = extractJson<{ conferences: any[] }>(rawText, { conferences: [] });
         const rawList = Array.isArray(parsed.conferences) ? parsed.conferences : [];
 
-        const validated: Opportunity[] = rawList
-          .filter((c: any) => c.title && c.url && typeof c.url === 'string' && c.url.startsWith('https://'))
-          .map((c: any) => ({
-            id: c.id ? String(c.id) : `conf-${Math.random().toString(36).substring(2, 9)}`,
-            title: String(c.title),
-            type: 'conference' as OpportunityType,
-            organization: String(c.organization || 'Tech Conference Organization'),
-            summary: String(c.summary || 'Global industry summit featuring architecture deep-dives and engineering workshops.'),
-            targetRoles: Array.isArray(c.targetRoles) && c.targetRoles.length > 0 ? c.targetRoles : [targetRole, 'Full-Stack Developer'],
-            relevantSkills: Array.isArray(c.relevantSkills) && c.relevantSkills.length > 0 ? c.relevantSkills : cleanSkills.slice(0, 4),
-            location: String(c.location || 'Virtual / Hybrid'),
-            isRemote: typeof c.isRemote === 'boolean' ? c.isRemote : true,
-            startDate: String(c.startDate || 'Upcoming 2026'),
-            deadlineDate: String(c.deadlineDate || 'Registration open'),
-            url: String(c.url),
-            prizeOrPerks: String(c.prizeOrPerks || 'Student Pass & Travel Grant Available'),
-            verificationStatus: 'verified' as const,
-            collectedAt: new Date().toISOString(),
-            isLiveScraped: false,
-            aiRecommendation: c.aiRecommendation || `Attend architecture keynotes to expand your ${cleanSkills.slice(0, 2).join(' & ')} knowledge.`,
-            matchScore: typeof c.matchScore === 'number' ? c.matchScore : 88,
-          }));
+        const validated: Opportunity[] = [];
+        for (const c of rawList) {
+          const base = registryMap.get(c.id);
+          if (base) {
+            validated.push({
+              ...base,
+              relevantSkills: Array.isArray(c.relevantSkills) && c.relevantSkills.length > 0 ? c.relevantSkills : base.relevantSkills,
+              aiRecommendation: c.aiRecommendation || `Attend architecture keynotes to expand your ${cleanSkills.slice(0, 2).join(' & ')} knowledge.`,
+              matchScore: typeof c.matchScore === 'number' ? c.matchScore : 88,
+              collectedAt: new Date().toISOString(),
+            });
+          }
+        }
 
         if (validated.length > 0) {
           conferenceAiCache.set(cacheKey, { timestamp: Date.now(), data: validated });
@@ -673,7 +672,7 @@ Output strictly valid JSON with root key "conferences":
     if (groqKey && groqKey.trim().length > 0 && !groqKey.includes('your_groq_api_key')) {
       try {
         const groq = new Groq({ apiKey: groqKey.trim(), timeout: 15000 });
-        const model = process.env.GROQ_MODEL || ENV.GROQ_MODEL || 'openai/gpt-oss-120b';
+        const model = process.env.GROQ_MODEL || ENV.GROQ_MODEL || 'llama-3.3-70b-versatile';
 
         const completion = await groq.chat.completions.create({
           model,
@@ -685,31 +684,22 @@ Output strictly valid JSON with root key "conferences":
           temperature: 0.2,
         });
 
-        const parsed = JSON.parse(completion.choices[0]?.message?.content || '{}');
+        const parsed = extractJson<{ conferences: any[] }>(completion.choices[0]?.message?.content || '{}', { conferences: [] });
         const rawList = Array.isArray(parsed.conferences) ? parsed.conferences : [];
 
-        const validated: Opportunity[] = rawList
-          .filter((c: any) => c.title && c.url && typeof c.url === 'string' && c.url.startsWith('https://'))
-          .map((c: any) => ({
-            id: c.id ? String(c.id) : `conf-${Math.random().toString(36).substring(2, 9)}`,
-            title: String(c.title),
-            type: 'conference' as OpportunityType,
-            organization: String(c.organization || 'Tech Conference Organization'),
-            summary: String(c.summary || 'Global industry summit featuring architecture deep-dives and engineering workshops.'),
-            targetRoles: Array.isArray(c.targetRoles) && c.targetRoles.length > 0 ? c.targetRoles : [targetRole, 'Full-Stack Developer'],
-            relevantSkills: Array.isArray(c.relevantSkills) && c.relevantSkills.length > 0 ? c.relevantSkills : cleanSkills.slice(0, 4),
-            location: String(c.location || 'Virtual / Hybrid'),
-            isRemote: typeof c.isRemote === 'boolean' ? c.isRemote : true,
-            startDate: String(c.startDate || 'Upcoming 2026'),
-            deadlineDate: String(c.deadlineDate || 'Registration open'),
-            url: String(c.url),
-            prizeOrPerks: String(c.prizeOrPerks || 'Student Pass & Travel Grant Available'),
-            verificationStatus: 'verified' as const,
-            collectedAt: new Date().toISOString(),
-            isLiveScraped: false,
-            aiRecommendation: c.aiRecommendation || `Attend architecture keynotes to expand your ${cleanSkills.slice(0, 2).join(' & ')} knowledge.`,
-            matchScore: typeof c.matchScore === 'number' ? c.matchScore : 88,
-          }));
+        const validated: Opportunity[] = [];
+        for (const c of rawList) {
+          const base = registryMap.get(c.id);
+          if (base) {
+            validated.push({
+              ...base,
+              relevantSkills: Array.isArray(c.relevantSkills) && c.relevantSkills.length > 0 ? c.relevantSkills : base.relevantSkills,
+              aiRecommendation: c.aiRecommendation || `Attend architecture keynotes to expand your ${cleanSkills.slice(0, 2).join(' & ')} knowledge.`,
+              matchScore: typeof c.matchScore === 'number' ? c.matchScore : 88,
+              collectedAt: new Date().toISOString(),
+            });
+          }
+        }
 
         if (validated.length > 0) {
           conferenceAiCache.set(cacheKey, { timestamp: Date.now(), data: validated });

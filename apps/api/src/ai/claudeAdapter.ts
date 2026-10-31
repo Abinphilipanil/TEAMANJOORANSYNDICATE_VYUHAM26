@@ -65,7 +65,7 @@ export class ClaudeResumeAnalysisAdapter implements ResumeAnalysisProvider {
     const groqKey = process.env.GROQ_API_KEY || ENV.GROQ_API_KEY;
 
     this.model = model || ENV.CLAUDE_MODEL || 'claude-sonnet-5';
-    this.groqModel = process.env.GROQ_MODEL || ENV.GROQ_MODEL || 'openai/gpt-oss-120b';
+    this.groqModel = process.env.GROQ_MODEL || ENV.GROQ_MODEL || 'llama-3.3-70b-versatile';
 
     if (anthropicKey && anthropicKey.trim().length > 0) {
       this.anthropicClient = new Anthropic({ apiKey: anthropicKey.trim() });
