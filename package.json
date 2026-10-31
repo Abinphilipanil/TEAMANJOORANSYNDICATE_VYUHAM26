@@ -11,10 +11,11 @@
     "dev": "npm run dev --workspaces --if-present",
     "dev:api": "npm run dev --workspace=apps/api",
     "dev:web": "npm run dev --workspace=apps/web",
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build:contracts && npm run build:api && npm run build:web",
     "build:contracts": "npm run build --workspace=packages/contracts",
     "build:api": "npm run build --workspace=apps/api",
     "build:web": "npm run build --workspace=apps/web",
+    "start:api": "npm run start --workspace=apps/api",
     "test": "npm run test --workspaces --if-present"
   },
   "keywords": [
@@ -27,4 +28,3 @@
   "author": "AF-03 Engineering Team",
   "license": "MIT"
 }
-
