@@ -109,7 +109,7 @@ export const analyzeResumeApi = async ({
   }
 
   // Determine backend URL (Vite dev server proxies /api to http://localhost:5000)
-  const backendBase = (import.meta as any).env?.VITE_BACKEND_API_URL || '';
+  const backendBase = ((import.meta as any).env?.VITE_BACKEND_API_URL || '').replace(/\/$/, '');
   const endpoint = `${backendBase}/api/agent/analyze`;
 
   const formData = new FormData();

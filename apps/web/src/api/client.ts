@@ -13,7 +13,8 @@ import {
   DownloadResourceResponse
 } from '@af03/contracts';
 
-const API_BASE = '/api';
+const BACKEND_BASE = ((import.meta as any).env?.VITE_BACKEND_API_URL || '').replace(/\/$/, '');
+const API_BASE = `${BACKEND_BASE}/api`;
 
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
