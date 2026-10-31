@@ -29,6 +29,7 @@ export interface SkillGapItem {
   priority: 'Critical' | 'High' | 'Medium' | 'Low';
   estimatedHours: string;
   recommendedAction: string;
+  importanceReason?: string;
 }
 
 export interface RoadmapStep {
@@ -224,26 +225,26 @@ export const learningRoadmap: RoadmapPhase[] = [
     phase: "Phase 1",
     title: "Cloud Infrastructure & Container Foundations",
     duration: "4 Weeks (est. 35 hrs)",
-    status: "Completed",
-    completionPercentage: 100,
+    status: "In Progress",
+    completionPercentage: 0,
     summary: "Master containerizing multi-tier microservices and deploying core cloud compute primitives.",
     steps: [
-      { id: "s1", title: "Advanced Multi-Stage Docker Builds", status: "completed", duration: "10 hrs" },
-      { id: "s2", title: "AWS Core Networking: VPC, Subnets & Security Groups", status: "completed", duration: "12 hrs" },
-      { id: "s3", title: "Managed Relational Databases (AWS RDS & Migrations)", status: "completed", duration: "13 hrs" },
+      { id: "s1", title: "Advanced Multi-Stage Docker Builds", status: "in-progress", duration: "10 hrs" },
+      { id: "s2", title: "AWS Core Networking: VPC, Subnets & Security Groups", status: "upcoming", duration: "12 hrs" },
+      { id: "s3", title: "Managed Relational Databases (AWS RDS & Migrations)", status: "upcoming", duration: "13 hrs" },
     ],
   },
   {
     phase: "Phase 2",
     title: "Kubernetes & Infrastructure as Code (IaC)",
     duration: "5 Weeks (est. 45 hrs)",
-    status: "In Progress",
-    completionPercentage: 60,
+    status: "Upcoming",
+    completionPercentage: 0,
     summary: "Orchestrate multi-service clusters with Kubernetes and codify cloud environments with Terraform.",
     steps: [
-      { id: "s4", title: "Kubernetes Workloads: Deployments, Services, Ingress", status: "completed", duration: "15 hrs" },
-      { id: "s5", title: "Terraform Fundamentals: Providers, State & Modular Code", status: "completed", duration: "14 hrs" },
-      { id: "s6", title: "Helm Charts & Configuration Packaging", status: "in-progress", duration: "16 hrs" },
+      { id: "s4", title: "Kubernetes Workloads: Deployments, Services, Ingress", status: "upcoming", duration: "15 hrs" },
+      { id: "s5", title: "Terraform Fundamentals: Providers, State & Modular Code", status: "upcoming", duration: "14 hrs" },
+      { id: "s6", title: "Helm Charts & Configuration Packaging", status: "upcoming", duration: "16 hrs" },
     ],
   },
   {

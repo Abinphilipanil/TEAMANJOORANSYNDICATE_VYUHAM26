@@ -206,8 +206,8 @@ export const RoadmapPreview: React.FC<RoadmapPreviewProps> = ({
                     onClick={onNavigateToWorkspace}
                     style={{ fontSize: '12.5px', padding: '7px 14px' }}
                   >
-                    <FolderKanban className="w-3.5 h-3.5" />
-                    Open Learning Workspace for this Phase
+                    <span>Review Identified Skill Gaps</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
               )}

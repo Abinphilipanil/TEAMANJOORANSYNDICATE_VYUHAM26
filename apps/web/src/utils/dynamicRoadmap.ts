@@ -100,43 +100,43 @@ export function generateDynamicRoadmapFromAnalysis(
 
   // ==========================================
   // PHASE 1: Foundational Competencies & Prerequisites
+  // Actionable bridging modules (Starts active at 0% without premature completion)
   // ==========================================
   const phase1Steps: RoadmapStep[] = [];
   let phase1Hours = 0;
 
-  // Include 2-3 matched skills to acknowledge existing candidate mastery (marked completed)
-  const topMatched = matchedSkills.slice(0, 3);
-  topMatched.forEach((m, idx) => {
-    const est = 15 + idx * 5;
-    phase1Hours += est;
-    phase1Steps.push({
-      id: `p1-m-${idx}`,
-      title: `${m.name} Architecture Verification & Primitives`,
-      status: 'completed',
-      duration: `${est} hrs`,
+  if (partialSkills.length > 0) {
+    // Bridge partially developed skills identified in the evaluation
+    partialSkills.forEach((p, idx) => {
+      const est = getSkillTimeEstimate(p.name, 'medium');
+      phase1Hours += est;
+      phase1Steps.push({
+        id: `p1-p-${idx}`,
+        title: `${p.name} Bridge: Production Standards & Architecture`,
+        status: idx === 0 ? 'in-progress' : 'upcoming',
+        duration: `${est} hrs`,
+      });
     });
-  });
-
-  // Include partially matched skills needing bridge upskilling (marked in-progress)
-  partialSkills.forEach((p, idx) => {
-    const est = getSkillTimeEstimate(p.name, 'medium');
-    phase1Hours += est;
-    phase1Steps.push({
-      id: `p1-p-${idx}`,
-      title: `${p.name} Bridge: Production Standards & Patterns`,
-      status: 'in-progress',
-      duration: `${est} hrs`,
-    });
-  });
-
-  if (phase1Steps.length === 0) {
-    phase1Steps.push({
-      id: 'p1-fallback-1',
-      title: `${targetRoleTitle} Prerequisite & Environment Setup`,
-      status: 'completed',
-      duration: '15 hrs',
-    });
-    phase1Hours += 15;
+  } else {
+    // Foundational prerequisites for target role
+    const foundationalSkill = missingSkills[0]?.name || targetRoleTitle;
+    const est1 = 15;
+    const est2 = 18;
+    phase1Hours += est1 + est2;
+    phase1Steps.push(
+      {
+        id: 'p1-setup-1',
+        title: `${foundationalSkill} Core Toolchain & System Configuration`,
+        status: 'in-progress',
+        duration: `${est1} hrs`,
+      },
+      {
+        id: 'p1-setup-2',
+        title: `${targetRoleTitle} Architecture Conventions & Baseline Sandbox`,
+        status: 'upcoming',
+        duration: `${est2} hrs`,
+      }
+    );
   }
 
   const phase1Weeks = Math.max(2, Math.ceil(phase1Hours / 10));
@@ -147,12 +147,12 @@ export function generateDynamicRoadmapFromAnalysis(
     phase: 'Phase 1',
     title: 'Foundational Competencies & Core Prerequisites',
     duration: `${phase1Weeks} Weeks (est. ${phase1Hours} hrs)`,
-    status: phase1CompletionPct === 100 ? 'Completed' : 'In Progress',
+    status: 'In Progress',
     completionPercentage: phase1CompletionPct,
     summary:
       partialSkills.length > 0
-        ? `Consolidate existing competencies in ${topMatched.map((m) => m.name).slice(0, 2).join(', ')} and bridge partial experience in ${partialSkills.map((p) => p.name).slice(0, 2).join(', ')}.`
-        : `Verified foundation in core engineering paradigms required for ${targetRoleTitle}.`,
+        ? `Consolidate core prerequisites and bridge verified partial experience in ${partialSkills.map((p) => p.name).slice(0, 3).join(', ')}.`
+        : `Establish core development toolchains and architectural conventions required for ${targetRoleTitle}.`,
     steps: phase1Steps,
   });
 
@@ -180,7 +180,7 @@ export function generateDynamicRoadmapFromAnalysis(
     phase2Steps.push({
       id: `p2-crit-${idx}-1`,
       title: `${skill.name} Fundamentals & System Configuration`,
-      status: idx === 0 ? 'in-progress' : 'upcoming',
+      status: 'upcoming',
       duration: `${h1} hrs`,
     });
 
@@ -198,7 +198,7 @@ export function generateDynamicRoadmapFromAnalysis(
     phase2Steps.push({
       id: 'p2-fallback',
       title: 'Advanced System Architecture & Distributed Services',
-      status: 'in-progress',
+      status: 'upcoming',
       duration: '28 hrs',
     });
     phase2Hours += 28;
@@ -212,7 +212,7 @@ export function generateDynamicRoadmapFromAnalysis(
     phase: 'Phase 2',
     title: 'Critical Competency Remediation & Core Systems',
     duration: `${phase2Weeks} Weeks (est. ${phase2Hours} hrs)`,
-    status: 'In Progress',
+    status: 'Upcoming',
     completionPercentage: phase2CompletionPct,
     summary: `Targeted remediation of highest-urgency gaps: ${targetPhase2Skills.map((s) => s.name).join(', ')}. Calibrated to eliminate primary hiring risk identified in your evaluation.`,
     steps: phase2Steps,
@@ -435,7 +435,8 @@ export function generateDynamicSkillGapsFromAnalysis(
       ? '25 hrs'
       : '16 hrs';
 
-    const action = matchingSug?.action || m.importance;
+    const action = matchingSug?.action || `Focus on practical implementation and enterprise conventions for ${m.name}.`;
+    const importance = m.importance || `Required core competency identified for ${targetRoleTitle}.`;
 
     skillGaps.push({
       id: `gap-missing-${idx}`,
@@ -448,6 +449,7 @@ export function generateDynamicSkillGapsFromAnalysis(
       priority: m.priority as 'Critical' | 'High' | 'Medium',
       estimatedHours: estHours.includes('hr') || estHours.includes('hour') ? estHours : `${estHours} hrs`,
       recommendedAction: action,
+      importanceReason: importance,
     });
   });
 
@@ -459,6 +461,8 @@ export function generateDynamicSkillGapsFromAnalysis(
     );
 
     const estHours = matchingSug?.timeEstimate ? matchingSug.timeEstimate : '14 hrs';
+    const action = matchingSug?.action || `Bridge foundational exposure in ${p.name} to enterprise standard.`;
+    const importance = p.notes || `Found partial background in resume; position requires professional depth.`;
 
     skillGaps.push({
       id: `gap-partial-${idx}`,
@@ -470,7 +474,8 @@ export function generateDynamicSkillGapsFromAnalysis(
       targetScore: 88,
       priority: 'Medium',
       estimatedHours: estHours.includes('hr') || estHours.includes('hour') ? estHours : `${estHours} hrs`,
-      recommendedAction: matchingSug?.action || p.notes,
+      recommendedAction: action,
+      importanceReason: importance,
     });
   });
 

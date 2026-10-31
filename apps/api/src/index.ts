@@ -39,22 +39,25 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 
 // Periodic Scheduled Inactivity Reminder Check (runs once a day)
 const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
-setInterval(() => {
-  console.log('[CRON JOB] Running scheduled 7-day inactivity reminder scan...');
-  emailReminderScheduler.executeInactivityCheck().catch(err => {
-    console.error('[CRON JOB ERROR]', err);
-  });
-}, TWENTY_FOUR_HOURS);
+if (!process.env.VERCEL) {
+  setInterval(() => {
+    console.log('[CRON JOB] Running scheduled 7-day inactivity reminder scan...');
+    emailReminderScheduler.executeInactivityCheck().catch(err => {
+      console.error('[CRON JOB ERROR]', err);
+    });
+  }, TWENTY_FOUR_HOURS);
+}
 
-// Start server
-app.listen(ENV.PORT, () => {
-  console.log(`=======================================================`);
-  console.log(`🚀 AF-03 API Server running on port ${ENV.PORT}`);
-  console.log(`📡 Base API URL: http://localhost:${ENV.PORT}/api`);
-  console.log(`📂 Workspace Storage Root: ${ENV.WORKSPACE_ROOT_PATH}`);
-  console.log(`✉️ Email Reminder Provider: ${ENV.EMAIL_PROVIDER}`);
-  console.log(`=======================================================`);
-});
+// Start server locally (on Vercel, this runs as a serverless function)
+if (!process.env.VERCEL) {
+  app.listen(ENV.PORT, () => {
+    console.log(`=======================================================`);
+    console.log(`🚀 AF-03 API Server running on port ${ENV.PORT}`);
+    console.log(`📡 Base API URL: http://localhost:${ENV.PORT}/api`);
+    console.log(`📂 Workspace Storage Root: ${ENV.WORKSPACE_ROOT_PATH}`);
+    console.log(`✉️ Email Reminder Provider: ${ENV.EMAIL_PROVIDER}`);
+    console.log(`=======================================================`);
+  });
+}
 
 export default app;
-

@@ -2,19 +2,16 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
   Home,
+  LayoutDashboard,
   FileText,
-  Compass,
   Layers,
   Milestone,
-  Bookmark,
   Settings,
-  FolderKanban,
   CheckSquare,
   Sparkles,
   UserCircle2,
   TrendingUp,
-  X,
-  Trophy
+  X
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -28,16 +25,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
 
   const primaryNavItems = [
     { to: '/', label: 'Home', icon: Home, end: true },
+    { to: '/dashboard', label: 'Executive Dashboard', icon: LayoutDashboard },
     { to: '/resume-analysis', label: 'Resume Analyzer', icon: FileText },
-    { to: '/careers', label: 'Career Explorer', icon: Compass },
     { to: '/skill-gaps', label: 'Skill Gaps', icon: Layers },
     { to: '/learning-roadmap', label: 'Learning Roadmap', icon: Milestone },
-    { to: '/hackathons', label: 'Hackathons', icon: Trophy },
-    { to: '/saved', label: 'Saved', icon: Bookmark },
   ];
 
   const teamWorkspaceItems = [
-    { to: '/workspace', label: 'Learning Workspace', icon: FolderKanban },
     { to: '/progress', label: 'Progress Tracking', icon: CheckSquare },
     { to: '/opportunities', label: 'Opportunities', icon: Sparkles },
     { to: '/profile', label: 'My Profile', icon: UserCircle2 },

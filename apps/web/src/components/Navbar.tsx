@@ -42,19 +42,6 @@ export const Navbar: React.FC = () => {
             </span>
           </Link>
           <Link
-            to="/careers"
-            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              isActive('/careers')
-                ? 'text-brand-700 bg-brand-50'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-            }`}
-          >
-            <span className="flex items-center gap-1.5">
-              <Compass className="w-4 h-4" />
-              Career Explorer
-            </span>
-          </Link>
-          <Link
             to="/how-it-works"
             className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               isActive('/how-it-works')

@@ -5,12 +5,10 @@ import { PublicLayout } from './layouts/PublicLayout';
 import { DashboardLayout } from './layouts/DashboardLayout';
 
 // Existing Team Pages
-import { CareerExplorerPage } from './pages/CareerExplorerPage';
 import { CareerProfilePage } from './pages/CareerProfilePage';
 import { HowItWorksPage } from './pages/HowItWorksPage';
 import { OnboardingPage } from './pages/OnboardingPage';
 import { DashboardPage } from './pages/DashboardPage';
-import { WorkspacePage } from './pages/WorkspacePage';
 import { ProgressPage } from './pages/ProgressPage';
 import { OpportunitiesPage } from './pages/OpportunitiesPage';
 import { ProfilePage } from './pages/ProfilePage';
@@ -20,12 +18,10 @@ import { RoadmapsListPage } from './pages/RoadmapsListPage';
 import { HomePage } from './pages/HomePage';
 import { ResumeAnalysisPage } from './pages/ResumeAnalysisPage';
 import { AnalysisResultsPage } from './pages/AnalysisResultsPage';
-import { JobMatchingPage } from './pages/JobMatchingPage';
 import { SkillGapsPage } from './pages/SkillGapsPage';
 import { LearningRoadmapPage } from './pages/LearningRoadmapPage';
-import { SavedPage } from './pages/SavedPage';
 import { SettingsPage } from './pages/SettingsPage';
-import { HackathonsPage } from './pages/HackathonsPage';
+import { AgentOverviewDashboard } from './pages/AgentOverviewDashboard';
 
 export const App: React.FC = () => {
   return (
@@ -36,19 +32,18 @@ export const App: React.FC = () => {
           <Route element={<DashboardLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/home" element={<HomePage />} />
-            <Route path="/dashboard" element={<HomePage />} />
+            <Route path="/dashboard" element={<AgentOverviewDashboard />} />
+            <Route path="/agent-dashboard" element={<AgentOverviewDashboard />} />
             <Route path="/resume-analysis" element={<ResumeAnalysisPage />} />
             <Route path="/analysis-results" element={<AnalysisResultsPage />} />
-            <Route path="/careers" element={<CareerExplorerPage />} />
+            <Route path="/careers" element={<Navigate to="/skill-gaps" replace />} />
             <Route path="/careers/:slug" element={<CareerProfilePage />} />
-            <Route path="/job-matching" element={<JobMatchingPage />} />
-            <Route path="/hackathons" element={<HackathonsPage />} />
+            <Route path="/job-matching" element={<Navigate to="/skill-gaps" replace />} />
             <Route path="/skill-gaps" element={<SkillGapsPage />} />
             <Route path="/learning-roadmap" element={<LearningRoadmapPage />} />
-            <Route path="/workspace" element={<WorkspacePage />} />
+            <Route path="/workspace" element={<Navigate to="/learning-roadmap" replace />} />
             <Route path="/progress" element={<ProgressPage />} />
             <Route path="/opportunities" element={<OpportunitiesPage />} />
-            <Route path="/saved" element={<SavedPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/roadmaps" element={<RoadmapsListPage />} />

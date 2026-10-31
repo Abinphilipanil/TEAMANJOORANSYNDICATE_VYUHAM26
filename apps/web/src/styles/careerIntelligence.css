@@ -892,6 +892,38 @@
   margin: 0;
 }
 
+/* Verified Tech Card - Clean Box without Progress Bar */
+.ci-verified-tech-card {
+  background: var(--ci-white);
+  border: 1px solid var(--ci-slate-200);
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ci-verified-tech-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--ci-primary-border);
+  box-shadow: var(--ci-shadow-subtle);
+}
+
+.ci-skill-verified-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: var(--ci-pill-radius);
+  background: var(--ci-emerald-soft);
+  color: #065F46;
+  border: 1px solid var(--ci-emerald-border);
+}
+
 .ci-skill-meter-wrap {
   display: flex;
   flex-direction: column;
@@ -1075,6 +1107,47 @@
 
 .ci-gap-action-box strong {
   color: #1E3A8A;
+}
+
+/* Action & Reason Details Box without progress bars */
+.ci-gap-details-card {
+  background: #F8FAFC;
+  border: 1px solid var(--ci-slate-200);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ci-gap-detail-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ci-gap-detail-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ci-slate-700);
+}
+
+.ci-gap-detail-text {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ci-slate-800);
+  margin: 0;
+  padding-left: 20px;
+}
+
+.ci-gap-reason-row {
+  border-top: 1px dashed var(--ci-slate-200);
+  padding-top: 8px;
 }
 
 /* ---------------- =======================================

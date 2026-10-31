@@ -142,11 +142,12 @@ export const apiClient = {
   },
 
   // Opportunities
-  async getOpportunities(targetRole?: string, type?: string, location?: string): Promise<Opportunity[]> {
+  async getOpportunities(targetRole?: string, type?: string, location?: string, skills?: string[]): Promise<Opportunity[]> {
     const params = new URLSearchParams();
     if (targetRole) params.append('targetRole', targetRole);
     if (type) params.append('type', type);
     if (location) params.append('location', location);
+    if (skills && skills.length > 0) params.append('skills', skills.join(','));
     const res = await fetch(`${API_BASE}/opportunities?${params.toString()}`);
     return handleResponse<Opportunity[]>(res);
   },
